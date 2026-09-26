@@ -352,6 +352,8 @@
     .lf-more[open] > summary::after { transform: rotate(45deg); }
     .lf-more .lf-opt { color: var(--slate); }
     .lf-more-body { padding-top: 12px; }
+    .lf-more::details-content { block-size: 0; overflow: hidden; transition: block-size .25s ease, content-visibility .25s allow-discrete; }
+    .lf-more[open]::details-content { block-size: auto; }
 
     /* Errors, sending state, thank-you message */
     .has-error .lf-input, .has-error .lf-choice { border-color: var(--error); }
@@ -387,6 +389,7 @@
     }
     .claim-text { font-weight: 400; font-size: clamp(1rem, 1.2vw, 1.125rem); line-height: 1.5; max-width: 50ch; }
     .claim .small { margin-top: 6px; color: var(--slate); font-size: .8125rem; }
+    .claim-num { display: inline-block; min-width: 7ch; color: var(--green); font-variant-numeric: tabular-nums; }
     @media (min-width: 760px) {
       .claim { grid-template-columns: minmax(200px, .75fr) 1.6fr; column-gap: 48px; row-gap: 0; align-items: baseline; padding-block: 32px; }
       .fig { grid-row: span 2; }
@@ -397,16 +400,49 @@
        7. In the news
        ===================================================================== */
     .press { padding-block: clamp(48px, 7vw, 88px); }
-    .press-in { display: grid; gap: 24px; }
-    @media (min-width: 960px) { .press-in { grid-template-columns: .3fr .7fr; gap: 64px; } }
     .press h3 { font-size: clamp(1.25rem, 1.8vw, 1.5rem); font-weight: 700; letter-spacing: -.02em; }
-    .press ul { list-style: none; margin: 0; padding: 0; }
-    .press li + li { border-top: 1px solid rgba(15, 30, 43, .18); }
-    .press a { display: grid; grid-template-columns: 9em 1fr; gap: 16px; padding: 16px 0; text-decoration: none; }
-    .press a:hover .press-h { text-decoration: underline; }
     .press-o { font-weight: 700; font-size: .875rem; color: var(--green); padding-top: .15em; }
-    .press-h { font-size: 1rem; line-height: 1.45; }
-    @media (max-width: 560px) { .press a { grid-template-columns: 1fr; gap: 2px; } }
+
+    /* News cards: same swipe-on-phones, grid-on-desktop idea as the project cards */
+    .news-nav { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin-top: 20px; }
+    .news-count { font-size: .9375rem; font-weight: 600; color: var(--slate); font-variant-numeric: tabular-nums; }
+    .news-arrows { display: flex; gap: 8px; }
+    .news-btn {
+      display: grid; place-items: center; width: 44px; height: 44px; padding: 0; cursor: pointer;
+      border-radius: 50%; border: 1.5px solid var(--ink); background: var(--white); color: var(--ink);
+      transition: background-color .15s ease, opacity .15s ease;
+    }
+    .news-btn svg { width: 20px; height: 20px; }
+    .news-btn:hover:not(:disabled) { background: var(--paper); }
+    .news-btn:disabled { opacity: .35; cursor: default; }
+    .news-grid {
+      display: grid; grid-auto-flow: column; grid-auto-columns: 86%; gap: 12px; margin-top: 14px;
+      margin-inline: calc(-1 * var(--gutter)); padding: 2px var(--gutter) 6px; scroll-padding-inline: var(--gutter);
+      overflow-x: auto; scroll-snap-type: x mandatory; overscroll-behavior-x: contain; scrollbar-width: none;
+    }
+    .news-grid::-webkit-scrollbar { display: none; }
+    .news-card {
+      display: flex; flex-direction: column; scroll-snap-align: start; scroll-snap-stop: always;
+      background: var(--white); border: 1px solid #C4CAC5; border-radius: var(--r); overflow: hidden;
+      box-shadow: 0 1px 2px rgba(15, 30, 43, .06); text-decoration: none; color: inherit;
+      transition: transform .18s cubic-bezier(.34, 1.4, .64, 1), box-shadow .18s ease;
+    }
+    .news-card:hover { transform: translateY(-3px); box-shadow: 0 8px 18px rgba(15, 30, 43, .16); }
+    .news-photo { position: relative; margin: 0; aspect-ratio: 16 / 9; background: linear-gradient(160deg, #DDE1DC, #C9CFC9); }
+    .news-photo img { width: 100%; height: 100%; object-fit: cover; display: block; }
+    .news-photo-fallback { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; padding: 12px; text-align: center; font-weight: 700; font-size: .95rem; color: var(--ink); }
+    .news-body { display: flex; flex-direction: column; gap: 6px; flex: 1; padding: 14px 14px 18px; }
+    .news-date { font-size: .8125rem; color: var(--slate); }
+    .press-h { font-size: .9375rem; font-weight: 600; line-height: 1.4; display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 3; line-clamp: 3; overflow: hidden; }
+    /* The peeking card shows only its frame and photo, so no text appears cut off */
+    @media (max-width: 899px) { .news-grid.is-swipe .news-card:not(.is-current) .news-body { opacity: 0; } }
+    @media (min-width: 900px) {
+      .news-nav { display: none; }
+      .news-grid { grid-auto-flow: row; grid-template-columns: 1fr 1fr; gap: 24px; margin-top: clamp(28px, 3.5vw, 40px); padding: 0; overflow: visible; }
+    }
+    @media (min-width: 1100px) {
+      .news-grid { grid-template-columns: repeat(4, 1fr); }
+    }
 
     /* =====================================================================
        8. Projects
@@ -841,9 +877,9 @@
           <p class="small">Source: Land Transport Authority, Singapore. Service targeted for early 2027.</p>
         </div>
         <div class="claim" data-reveal>
-          <span class="fig" aria-hidden="true">Every day</span>
-          <p class="claim-text">Hundreds of thousands of Malaysians cross into Singapore for work every day. Many want to rent close to the crossing.</p>
-          <p class="small">That is the tenant pool for units near the CIQ.</p>
+          <span class="fig" aria-hidden="true">300,000+</span>
+          <p class="claim-text">About <span class="sr-only">300,000</span><span class="claim-num" id="fig-crossing-num" aria-hidden="true">0</span> people cross the Johor–Singapore Causeway every day, most of them Malaysians working in Singapore. Many want to rent close to the crossing.</p>
+          <p class="small">Source: Johor state government and Malay Mail reports. That is the tenant pool for units near the CIQ.</p>
         </div>
         <div class="claim" data-reveal>
           <span class="fig" aria-hidden="true">RM2,200</span>
@@ -863,15 +899,64 @@
        IN THE NEWS
        ====================================================================== -->
   <section class="press sand" aria-labelledby="press-title">
-    <div class="wrap press-in">
+    <div class="wrap">
       <h3 id="press-title">In the news</h3>
-      <ul>
-        <!-- REPLACE each href="#" with the article link -->
-        <li><a href="#"><span class="press-o">The Sun</span><span class="press-h">Johor experiences strongest property demand from foreigners, led by Singaporeans</span></a></li>
-        <li><a href="#"><span class="press-o">The Star</span><span class="press-h">Johor property sales set to boom with announcement</span></a></li>
-        <li><a href="#"><span class="press-o">PropertyGuru</span><span class="press-h">Johor real estate showing signs of steady growth</span></a></li>
-        <li><a href="#"><span class="press-o">Yahoo News</span><span class="press-h">Investment property in Johor: top 2 areas with price appreciation</span></a></li>
-      </ul>
+
+      <!-- Counter and arrows (phones only; shown by the script) -->
+      <div class="news-nav" id="news-nav" hidden>
+        <p class="news-count" aria-live="polite"><span id="news-i">1</span> of <span id="news-n">4</span></p>
+        <div class="news-arrows">
+          <button type="button" class="news-btn" id="news-prev" aria-label="Previous article"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M15 5l-7 7 7 7" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+          <button type="button" class="news-btn" id="news-next" aria-label="Next article"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 5l7 7-7 7" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+        </div>
+      </div>
+
+      <div class="news-grid" id="news-track">
+        <a class="news-card" href="https://thesun.my/business/johor-experiences-strongest-property-demand-from-foreigners-led-by-singaporeans-lc12019046/" target="_blank" rel="noopener">
+          <figure class="news-photo">
+            <img src="assets/news/thesun/thesun-ss.png" alt="" loading="lazy">
+            <span class="news-photo-fallback" hidden>The Sun</span>
+          </figure>
+          <div class="news-body">
+            <span class="press-o">The Sun</span>
+            <span class="news-date">23 Jan 2024</span>
+            <span class="press-h">Johor experiences strongest property demand from foreigners, led by Singaporeans</span>
+          </div>
+        </a>
+        <a class="news-card" href="https://www.thestar.com.my/news/nation/2023/10/23/johor-property-sales-set-to-boom-with-announcement" target="_blank" rel="noopener">
+          <figure class="news-photo">
+            <img src="assets/news/thestar/thestar-ss.png" alt="" loading="lazy">
+            <span class="news-photo-fallback" hidden>The Star</span>
+          </figure>
+          <div class="news-body">
+            <span class="press-o">The Star</span>
+            <span class="news-date">23 Oct 2023</span>
+            <span class="press-h">Johor property sales set to boom with announcement</span>
+          </div>
+        </a>
+        <a class="news-card" href="https://www.propertyguru.com.my/property-guides/investment-property-johor-top-areas-51606" target="_blank" rel="noopener">
+          <figure class="news-photo">
+            <img src="assets/news/propertyguru/propertyguru-ss.png" alt="" loading="lazy">
+            <span class="news-photo-fallback" hidden>PropertyGuru</span>
+          </figure>
+          <div class="news-body">
+            <span class="press-o">PropertyGuru</span>
+            <span class="news-date">1 Jul 2021</span>
+            <span class="press-h">Investment Property In Johor: Top 2 Areas With Price Appreciation</span>
+          </div>
+        </a>
+        <a class="news-card" href="https://www.nst.com.my/property/2026/08/1509532/rts-link-redraws-johor-property-map-singapore-demand-spills-across" target="_blank" rel="noopener">
+          <figure class="news-photo">
+            <img src="assets/news/businesstime/businesstime-ss.png" alt="" loading="lazy">
+            <span class="news-photo-fallback" hidden>Yahoo News</span>
+          </figure>
+          <div class="news-body">
+            <span class="press-o">Yahoo News</span>
+            <span class="news-date">12 Aug 2026</span>
+            <span class="press-h">RTS Link redraws Johor property map as Singapore demand spills across Causeway</span>
+          </div>
+        </a>
+      </div>
     </div>
   </section>
 
@@ -1324,6 +1409,7 @@ var LEAD_FORM = {
     }
 
     // Build the fields from LEAD_FORM
+    var section1Qs = [];
     LEAD_FORM.sections.forEach(function (sec) {
       var section, optionalOnly = sec.questions.every(function (q) { return !q.required; });
       if (optionalOnly) {
@@ -1409,9 +1495,41 @@ var LEAD_FORM = {
         wrap.addEventListener('focusout', function () { if (attempted) validate(q); });
         section.appendChild(wrap);
         all.push(q);
+        if (!optionalOnly) section1Qs.push(q);
       });
       if (!optionalOnly) holder.appendChild(section);
     });
+
+    // Section 2 ("About your plans") opens automatically once Section 1 is complete, and
+    // closes again the moment it isn't. Its fields are disabled while closed so nothing in
+    // there gets submitted, but nothing typed in them is ever cleared.
+    var moreDetails = holder.querySelector('.lf-more');
+    if (moreDetails) {
+      var nameQ = section1Qs.filter(function (q) { return q.type === 'text'; })[0];
+      var emailQ = section1Qs.filter(function (q) { return q.type === 'email'; })[0];
+      var phoneQ = section1Qs.filter(function (q) { return q.type === 'tel'; })[0];
+      var moreOtherQs = all.filter(function (q) { return q.otherInput && moreDetails.contains(q.wrap); });
+
+      function setSection2Enabled(enabled) {
+        moreDetails.querySelectorAll('input:not(.lf-other), select, textarea').forEach(function (el) { el.disabled = !enabled; });
+        // "Other" free-text boxes keep following their own radio/checkbox, not just the section's state
+        moreOtherQs.forEach(function (q) { q.otherInput.disabled = !enabled || !q.otherChoice.checked; });
+      }
+      setSection2Enabled(false); // starts hidden
+
+      function emailLooksValid(v) { return /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(v); }
+      function phoneDigitCount(v) { return v.replace(/\D/g, '').length; }
+      function section1Complete() {
+        return !!nameQ.input.value.trim() && emailLooksValid(emailQ.input.value.trim()) && phoneDigitCount(phoneQ.input.value) >= 9;
+      }
+      function syncSection2() {
+        var shouldShow = section1Complete();
+        if (shouldShow === moreDetails.open) return;
+        moreDetails.open = shouldShow;
+        setSection2Enabled(shouldShow);
+      }
+      [nameQ.input, emailQ.input, phoneQ.input].forEach(function (input) { input.addEventListener('input', syncSection2); });
+    }
 
     // Google needs every page in pageHistory to accept a multi-page response ("0,1" for two sections)
     $('lf-page-history').value = LEAD_FORM.sections.map(function (_, i) { return i; }).join(',');
@@ -1493,6 +1611,46 @@ var LEAD_FORM = {
         });
     });
   })();
+
+  /* ---------- 5b. In the news: "1 of 4" counter and arrows for the sideways cards on phones ---------- */
+  (function () {
+    var track = $('news-track'), nav = $('news-nav');
+    if (!track || !nav || !('IntersectionObserver' in window)) return;
+    var cards = track.querySelectorAll('.news-card'), prev = $('news-prev'), next = $('news-next'), current = 0;
+    function indexOf(card) { return Array.prototype.indexOf.call(cards, card); }
+    function show(i) {
+      current = i;
+      $('news-i').textContent = i + 1;
+      prev.disabled = i === 0;
+      next.disabled = i === cards.length - 1;
+      Array.prototype.forEach.call(cards, function (c, j) { c.classList.toggle('is-current', j === i); });
+    }
+    function go(i) {
+      i = Math.max(0, Math.min(cards.length - 1, i));
+      cards[i].scrollIntoView({ behavior: motionOK ? 'smooth' : 'auto', block: 'nearest', inline: 'start' });
+    }
+    $('news-n').textContent = cards.length;
+    nav.hidden = false;
+    track.classList.add('is-swipe');
+    prev.addEventListener('click', function () { go(current - 1); });
+    next.addEventListener('click', function () { go(current + 1); });
+    // The card that is mostly in view becomes the current one
+    var io = new IntersectionObserver(function (es) {
+      es.forEach(function (e) { if (e.intersectionRatio >= .6) show(indexOf(e.target)); });
+    }, { root: track, threshold: [.6] });
+    Array.prototype.forEach.call(cards, function (c) { io.observe(c); });
+    // Tabbing to a card brings it into view
+    track.addEventListener('focusin', function (e) { var c = e.target.closest('.news-card'); if (c) show(indexOf(c)); });
+    show(0);
+  })();
+
+  /* ---------- 5c. In the news: fall back to a plain outlet-name tile if a screenshot fails to load ---------- */
+  each('.news-photo img', function (img) {
+    img.addEventListener('error', function () {
+      img.hidden = true;
+      img.nextElementSibling.hidden = false;
+    }, { once: true });
+  });
 
   /* ---------- 6. Projects: "1 of 2" counter and arrows for the sideways cards on phones ---------- */
   (function () {
@@ -1621,6 +1779,30 @@ var LEAD_FORM = {
     var leadForm = $('lead-form');                              // the keyboard is up while typing
     leadForm.addEventListener('focusin', function (e) { if (e.target.matches('input[type=text], input[type=email], input[type=tel], textarea')) { typing = true; sync(); } });
     leadForm.addEventListener('focusout', function () { typing = false; setTimeout(sync, 50); });
+  })();
+
+  /* ---------- 8b. "Why JB": count the in-sentence "300,000" up once it scrolls into view.
+     Screen readers get a plain, unchanging "300,000" via the sr-only span next to it. ---------- */
+  (function () {
+    var num = $('fig-crossing-num');
+    if (!num) return;
+    var TARGET = 300000;
+    function fmt(n) { return Math.round(n).toLocaleString('en-MY'); }
+    if (!motionOK || !('IntersectionObserver' in window)) { num.textContent = fmt(TARGET); return; }
+    num.textContent = fmt(0);
+    var io = new IntersectionObserver(function (es, obs) {
+      es.forEach(function (e) {
+        if (!e.isIntersecting) return;
+        obs.disconnect();
+        var t0 = performance.now();
+        (function step(t) {
+          var k = Math.min((t - t0) / 1500, 1); k = 1 - Math.pow(1 - k, 3);
+          num.textContent = fmt(TARGET * k);
+          if (k < 1) requestAnimationFrame(step);
+        })(t0);
+      });
+    }, { threshold: .4 });
+    io.observe(num);
   })();
 
   /* ---------- 9. Scroll reveals ---------- */
