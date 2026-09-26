@@ -427,7 +427,7 @@
     .proj-btn:disabled { opacity: .35; cursor: default; }
     .proj-grid {
       display: grid; grid-auto-flow: column; grid-auto-columns: 86%; gap: 12px; margin-top: 14px;
-      margin-inline: calc(-1 * var(--gutter)); padding: 2px var(--gutter) 6px; scroll-padding-inline: var(--gutter);
+      margin-inline: calc(-1 * var(--gutter)); padding: 28px var(--gutter) 6px; scroll-padding-inline: var(--gutter);
       overflow-x: auto; scroll-snap-type: x mandatory; overscroll-behavior-x: contain; scrollbar-width: none;
     }
     .proj-grid::-webkit-scrollbar { display: none; }
@@ -449,11 +449,39 @@
     .facts dd { margin: 0; font-size: .9375rem; font-weight: 400; line-height: 1.4; }
     .proj .btn { align-self: flex-start; }
     .dev-note { margin-top: 24px; color: var(--slate); font-size: .95rem; }
+
+    /* 360° tour: loads inside the same photo frame; the fallback photo shows underneath
+       until the tour loads (or stays, if it fails) */
+    .pano { position: relative; }
+    .proj .pano { aspect-ratio: 16 / 9; border-radius: 4px; overflow: hidden; }
+    .pano-fallback { position: absolute; inset: 0; aspect-ratio: auto; border-radius: 0; }
+    .pano-frame { position: absolute; inset: 0; width: 100%; height: 100%; border: 0; opacity: 0; transition: opacity .5s ease; }
+    .pano.pano-ready .pano-frame { opacity: 1; }
+    .pano.pano-ready .pano-fallback { opacity: 0; transition: opacity .5s ease .15s; }
+    .pano-badge, .pano-hint {
+      position: absolute; z-index: 2; font-weight: 700; font-size: .75rem; letter-spacing: .01em;
+      background: rgba(10, 22, 34, .72); color: var(--white); border-radius: 999px; pointer-events: none;
+    }
+    .pano-badge { top: 10px; left: 10px; padding: 4px 10px; }
+    .pano-hint { left: 50%; bottom: 12px; transform: translateX(-50%); font-weight: 600; font-size: .8125rem; padding: 6px 14px; transition: opacity .35s ease; }
+    .pano.pano-touched .pano-hint, .pano.pano-failed .pano-hint, .pano.pano-failed .pano-badge { opacity: 0; }
+
+    /* Featured project card: green border, a badge straddling the top edge, and a callout note */
+    .proj.is-featured { position: relative; border: 2px solid var(--green); padding-top: 38px; }
+    .proj-badge {
+      position: absolute; top: 0; left: 16px; transform: translateY(-50%); z-index: 3;
+      display: inline-flex; align-items: center; gap: 6px; white-space: nowrap;
+      background: var(--green); color: var(--white); font-weight: 700; font-size: .875rem;
+      padding: .5em 1.1em .5em .9em; border-radius: 999px; box-shadow: 0 4px 10px rgba(15, 30, 43, .25);
+    }
+    .proj-badge .ico { width: 14px; height: 14px; flex: none; }
+    .proj-callout { margin-top: 14px; padding: 10px 14px; border-radius: var(--r); background: #EAF4F1; color: var(--green); font-weight: 700; font-size: .875rem; line-height: 1.4; }
     @media (min-width: 900px) {
       .proj-nav { display: none; }
       .proj-grid { grid-auto-flow: row; grid-template-columns: 1fr 1fr; gap: 32px; margin: clamp(32px, 4vw, 48px) 0 0; padding: 0; overflow: visible; }
       .proj { padding: 16px 16px 22px; }
       .proj-body { padding: 0 6px; }
+      .proj-badge { left: 22px; }
     }
 
     /* =====================================================================
@@ -678,6 +706,7 @@
 <!-- Icon sprite: neutral chat icon used on WhatsApp buttons -->
 <svg width="0" height="0" style="position:absolute" aria-hidden="true">
   <symbol id="i-chat" viewBox="0 0 24 24"><path d="M12 3.5c-4.7 0-8.5 3.3-8.5 7.4 0 2.2 1.1 4.1 2.8 5.5L5.5 20.5l4.4-2.2c.7.1 1.4.2 2.1.2 4.7 0 8.5-3.3 8.5-7.4S16.7 3.5 12 3.5z" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linejoin="round"/></symbol>
+  <symbol id="i-star" viewBox="0 0 24 24"><path d="M12 3l2.7 5.6 6.1.8-4.4 4.3 1.1 6.1L12 16.9l-5.5 2.9 1.1-6.1-4.4-4.3 6.1-.8L12 3z" fill="currentColor"/></symbol>
 </svg>
 
 <!-- ======================================================================
@@ -863,8 +892,15 @@
 
       <div class="proj-grid" id="proj-track">
         <article class="proj" data-reveal aria-labelledby="kt-title">
-          <!-- REPLACE with <img src="..." alt="Exsim Kebun Teh" style="width:100%;aspect-ratio:16/9;object-fit:cover;border-radius:4px"> -->
-          <div class="photo" role="img" aria-label="Photo placeholder: Exsim Kebun Teh"><span class="ph-label">Photo: Kebun Teh, 16:9</span></div>
+          <!-- 360° tour loads from SETTINGS.panoTours.kt once this section scrolls into view.
+               REPLACE the fallback below with <img src="..." alt="Exsim Kebun Teh" style="width:100%;height:100%;object-fit:cover">
+               it shows while the tour loads, and stays if it fails to load. -->
+          <div class="pano" data-pano="kt">
+            <div class="photo pano-fallback" role="img" aria-label="Photo placeholder: Exsim Kebun Teh"><span class="ph-label">Photo: Kebun Teh, 16:9</span></div>
+            <iframe class="pano-frame" title="360° virtual tour: Exsim Kebun Teh"></iframe>
+            <span class="pano-badge" aria-hidden="true">360°</span>
+            <span class="pano-hint" aria-hidden="true">Drag to explore</span>
+          </div>
           <div class="proj-body">
             <h3 id="kt-title">Exsim Kebun Teh</h3>
             <p class="lede">About 3 km from the CIQ, with a free shuttle bus to the crossing and daily errands within walking distance.</p>
@@ -878,12 +914,21 @@
           </div>
         </article>
 
-        <article class="proj" data-reveal aria-labelledby="ciq-title">
-          <!-- REPLACE with <img src="..." alt="Exsim CIQ" style="width:100%;aspect-ratio:16/9;object-fit:cover;border-radius:4px"> -->
-          <div class="photo" role="img" aria-label="Photo placeholder: Exsim CIQ"><span class="ph-label">Photo: Exsim CIQ, 16:9</span></div>
+        <article class="proj is-featured" data-reveal aria-labelledby="ciq-title">
+          <span class="proj-badge"><svg class="ico" aria-hidden="true"><use href="#i-star"/></svg>Investors' Choice</span>
+          <!-- 360° tour loads from SETTINGS.panoTours.ciq once this section scrolls into view.
+               REPLACE the fallback below with <img src="..." alt="Exsim CIQ" style="width:100%;height:100%;object-fit:cover">
+               it shows while the tour loads, and stays if it fails to load. -->
+          <div class="pano" data-pano="ciq">
+            <div class="photo pano-fallback" role="img" aria-label="Photo placeholder: Exsim CIQ"><span class="ph-label">Photo: Exsim CIQ, 16:9</span></div>
+            <iframe class="pano-frame" title="360° virtual tour: Exsim CIQ"></iframe>
+            <span class="pano-badge" aria-hidden="true">360°</span>
+            <span class="pano-hint" aria-hidden="true">Drag to explore</span>
+          </div>
           <div class="proj-body">
             <h3 id="ciq-title">Exsim CIQ</h3>
             <p class="lede">Exsim's prime-location project for investors who want to be as close to the crossing as possible.</p>
+            <p class="proj-callout">PLACEHOLDER TEXT IN HERE</p>
             <dl class="facts">
               <!-- REPLACE with the real distance and price -->
               <div><dt>To the CIQ</dt><dd>Ask me for the exact distance and walking route</dd></div>
@@ -1123,6 +1168,9 @@ var SETTINGS = {
 
   // Optional: official developer logos (URL or data: URI, SVG or transparent PNG). '' shows the name instead.
   developerLogos: { exsim: '', setia: '', ecoworld: '', mahsing: '', iwcity: '' },
+
+  // 360° virtual tours for the project cards (drag to look around). '' keeps the fallback photo.
+  panoTours: { kt: 'https://360vr.my/exsim/celestz/', ciq: 'https://360vr.my/exsim/causewayz/' },
 
   // Pre-filled WhatsApp message for each button
   messages: {
@@ -1474,6 +1522,44 @@ var LEAD_FORM = {
     // Tabbing to a button inside a card brings that card in
     track.addEventListener('focusin', function (e) { var c = e.target.closest('.proj'); if (c) show(indexOf(c)); });
     show(0);
+  })();
+
+  /* ---------- 6b. Project 360° tours: load the viewer only once the section scrolls into view ---------- */
+  (function () {
+    var section = document.getElementById('projects');
+    if (!section) return;
+    var panos = section.querySelectorAll('.pano[data-pano]');
+    if (!panos.length) return;
+
+    function activate(pano) {
+      var src = SETTINGS.panoTours && SETTINGS.panoTours[pano.dataset.pano];
+      var frame = pano.querySelector('.pano-frame');
+      if (!src || !frame) return;
+      var failTimer = setTimeout(function () { pano.classList.add('pano-failed'); }, 12000);
+      frame.addEventListener('load', function () { clearTimeout(failTimer); pano.classList.add('pano-ready'); });
+      frame.addEventListener('error', function () { clearTimeout(failTimer); pano.classList.add('pano-failed'); });
+      frame.src = src;
+    }
+
+    if (!('IntersectionObserver' in window)) {
+      Array.prototype.forEach.call(panos, activate);
+    } else {
+      var io = new IntersectionObserver(function (entries, obs) {
+        entries.forEach(function (entry) {
+          if (!entry.isIntersecting) return;
+          Array.prototype.forEach.call(panos, activate);
+          obs.disconnect();
+        });
+      }, { threshold: .15 });
+      io.observe(section);
+    }
+
+    // A cross-origin tour can't tell us it was dragged, but focus moves into it as soon as
+    // someone clicks or swipes inside it, which we can catch as the window losing focus.
+    window.addEventListener('blur', function () {
+      var active = document.activeElement, pano = active && active.closest && active.closest('.pano');
+      if (pano) pano.classList.add('pano-touched');
+    });
   })();
 
   /* ---------- 7. Yield check ---------- */
