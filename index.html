@@ -529,7 +529,7 @@
       height: clamp(76px, 8vw, 104px); min-width: clamp(148px, 15vw, 204px); padding: 0 clamp(20px, 2.4vw, 32px);
       background: var(--white); border: 1px solid rgba(15, 30, 43, .14); border-radius: var(--r);
     }
-    .logo img { width: auto; max-width: 100%; max-height: 46%; object-fit: contain; filter: grayscale(1); opacity: .8; transition: filter .3s ease, opacity .3s ease; }
+    .logo img { width: auto; max-width: 100%; max-height: 46%; object-fit: contain; opacity: .8; transition: filter .3s ease, opacity .3s ease; }
     .logo:hover img { filter: none; opacity: 1; }
     .logo-name { font-weight: 700; font-size: clamp(1.05rem, 1.8vw, 1.35rem); letter-spacing: -.01em; white-space: nowrap; }
     .logo.loaded .logo-name { position: absolute; width: 1px; height: 1px; margin: -1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
@@ -1169,7 +1169,7 @@ var SETTINGS = {
   whatsappIcon: '',
 
   // Optional: official developer logos (URL or data: URI, SVG or transparent PNG). '' shows the name instead.
-  developerLogos: { exsim: '', setia: '', ecoworld: '', mahsing: '', iwcity: '' },
+  developerLogos: { exsim: 'https://exsim.com.my/wp-content/uploads/2018/06/exsim-logo.png', setia: 'https://spsetia-cdn-f9hffqarazcwc5fj.a03.azurefd.net/wp-content/uploads/2026/03/spsetia-Logo-llpw-color.svg', ecoworld: 'https://ecoworld.my/wp-content/themes/ecoworld-2021/img/mobile/logo-mobile.svg', mahsing: 'https://d2r7b5s36s7apk.cloudfront.net/Developer/6/98b799bb775848248b06badf130d5fea.jpg', iwcity: 'https://www.wctland.com.my/images/wct-logo.png' },
 
   // 360° virtual tours for the project cards (drag to look around). '' keeps the fallback photo.
   panoTours: { kt: 'https://360vr.my/exsim/celestz/', ciq: 'https://360vr.my/exsim/causewayz/' },
