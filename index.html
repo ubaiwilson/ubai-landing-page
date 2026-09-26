@@ -1,0 +1,1550 @@
+<!doctype html>
+<!--
+  Ubai Wilson: landing page
+  =========================================================================
+  One self-contained file. The only outside resource is the Google Font.
+
+  BEFORE PUBLISHING (search this file for "REPLACE" to find each spot)
+  1. REN number: shown as "REN XXXXX" in the About section and the footer.
+  2. Header tagline: shown as "REPLACE: tagline" under your name.
+  3. Photos: hero photo (and its caption), two project photos, your portrait.
+  4. News links: the four href="#" links in "In the news".
+  5. Exsim CIQ: the real distance and price.
+  6. Optional: official WhatsApp icon and developer logos (SETTINGS near the bottom).
+  7. Send one test through the consultation form and check Google Forms > Responses.
+
+  Your WhatsApp number, button messages and the Google Form mapping are all in
+  SETTINGS and LEAD_FORM near the bottom of the file.
+-->
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>Ubai Wilson, new property near the JB CIQ</title>
+  <meta name="description" content="Ubai Wilson helps investors and home buyers get into new launches near the Johor Bahru CIQ. Get your free consultation on WhatsApp.">
+  <meta property="og:title" content="Ubai Wilson, new property near the JB CIQ">
+  <meta property="og:description" content="New launches near the Johor Bahru CIQ, one train ride from Singapore. Get your free consultation on WhatsApp.">
+  <meta property="og:type" content="website">
+  <meta name="theme-color" content="#0F1E2B">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wdth,wght@12..96,75..100,300..800&amp;display=swap" rel="stylesheet">
+
+  <!-- Lets CSS hide scroll-reveal content only when JavaScript is running -->
+  <script>document.documentElement.classList.add('js');</script>
+
+  <style>
+    /* =====================================================================
+       1. Design tokens
+       ===================================================================== */
+    :root {
+      --ink: #0F1E2B;          /* harbour navy: text and dark sections */
+      --ink-2: #1A2E3F;        /* route water band, bar track on navy */
+      --ink-3: #0A1622;        /* footer */
+      --paper: #F4F4F1;        /* page background */
+      --white: #FFFFFF;
+      --sand: #EAE5DC;         /* quieter bands */
+      --line: #DCDFDA;         /* hairlines */
+      --field: #858E88;        /* form field borders and slider track (3:1 or better) */
+      --slate: #56616B;        /* secondary text on light */
+      --on-ink: #AEB8C2;       /* secondary text on navy */
+      --green: #1E6B5C;        /* buttons on light sections */
+      --green-hover: #175548;
+      --mint: #8FD3BF;         /* main call to action */
+      --mint-hover: #A6DECD;
+      --error: #B3261E;
+
+      --font: "Bricolage Grotesque", "Arial Narrow", "Helvetica Neue", Arial, sans-serif;
+      --wrap: 1280px;
+      /* Side padding; also clears the iPhone notch in landscape */
+      --gutter: max(clamp(20px, 5vw, 56px), env(safe-area-inset-left, 0px), env(safe-area-inset-right, 0px));
+      --section: clamp(64px, 10vw, 136px);   /* space between sections */
+      --r: 6px;                              /* corner radius for photos and panels (buttons are pills) */
+
+      --mark: var(--green);    /* route mark above section headings */
+      --focus: var(--green);   /* focus ring, swapped on dark sections */
+      --edge: var(--ink);      /* button bottom edge */
+
+      color-scheme: light;
+      interpolate-size: allow-keywords;
+    }
+
+    /* =====================================================================
+       2. Base, type and utilities
+       ===================================================================== */
+    *, *::before, *::after { box-sizing: border-box; }
+    html { -webkit-text-size-adjust: 100%; }
+    @media (prefers-reduced-motion: no-preference) { html { scroll-behavior: smooth; } }
+    body {
+      margin: 0; background: var(--paper); color: var(--ink);
+      font: 400 1rem/1.6 var(--font); font-variation-settings: "opsz" 16;   /* 16px on phones */
+      -webkit-font-smoothing: antialiased;
+    }
+    @media (min-width: 960px) { body { font-size: 1.0625rem; } }           /* 17px on desktop */
+    img { display: block; max-width: 100%; }
+    a { color: inherit; text-underline-offset: .2em; text-decoration-thickness: 1.5px; }
+    :focus-visible { outline: 3px solid var(--focus); outline-offset: 3px; border-radius: 8px; }
+    [hidden] { display: none !important; }
+    section[id] { scroll-margin-top: 84px; }
+    p { margin: 0; max-width: 60ch; }
+
+    h1, h2, h3 { margin: 0; font-family: var(--font); }
+    /* Section headings are normal width; only the hero headline and key figures use the condensed style */
+    h2 {
+      font-weight: 700; font-stretch: 100%; font-variation-settings: "opsz" 64;
+      font-size: clamp(1.625rem, 3vw, 2.5rem); line-height: 1.08; letter-spacing: -.022em; max-width: 20ch;
+      text-wrap: balance;
+    }
+    h3 { font-weight: 700; font-size: 1.25rem; line-height: 1.2; font-variation-settings: "opsz" 48; }
+    .lede { font-size: clamp(1.0625rem, 1.2vw, 1.1875rem); line-height: 1.55; }
+    .small { font-size: .875rem; line-height: 1.5; }
+    .muted { color: var(--slate); }
+    /* Figures and prices use evenly spaced digits so they line up */
+    .fig, .result-num, .field output, .range-ends, .bar-scale, .facts dd, .step-num, .rt { font-variant-numeric: tabular-nums lining-nums; }
+
+    .wrap { max-width: var(--wrap); margin-inline: auto; padding-inline: var(--gutter); }
+    .sr-only { position: absolute !important; width: 1px; height: 1px; margin: -1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; border: 0; }
+    .skip { position: absolute; left: 12px; top: -60px; z-index: 100; background: var(--mint); color: var(--ink); padding: 10px 16px; border-radius: 999px; font-weight: 700; text-decoration: none; }
+    .skip:focus { top: 12px; }
+
+    /* Section backgrounds */
+    .dark { background: var(--ink); color: var(--white); --focus: var(--mint); --edge: #6B7C8C; --mark: var(--mint); }
+    .dark .muted { color: var(--on-ink); }
+    .white { background: var(--white); }
+    .sand { background: var(--sand); }
+
+    /* Route mark above section headings: dashed road, CIQ stop, solid rail */
+    .sec-mark::before {
+      content: ""; display: block; width: 92px; height: 10px; margin-bottom: 18px;
+      background:
+        repeating-linear-gradient(90deg, var(--mark) 0 6px, transparent 6px 11px) 0 50% / 38px 2px no-repeat,
+        radial-gradient(circle, var(--mark) 0 3.5px, transparent 4px) 40px 50% / 10px 10px no-repeat,
+        linear-gradient(var(--mark), var(--mark)) 54px 50% / 38px 4px no-repeat;
+    }
+
+    /* Photo placeholders (swap for <img> when you have photos) */
+    .photo { aspect-ratio: 16 / 10; border-radius: var(--r); background: linear-gradient(160deg, #DDE1DC, #C9CFC9); display: flex; align-items: flex-end; padding: 14px; }
+    .ph-label { font-size: .82rem; font-weight: 600; background: var(--white); color: var(--ink); padding: 6px 12px; border-radius: 999px; text-align: center; }
+
+    /* =====================================================================
+       3. Buttons
+       ===================================================================== */
+    .btn {
+      display: inline-flex; align-items: center; justify-content: center; gap: .6em; cursor: pointer;
+      font: 700 1.05rem var(--font); line-height: 1.1; text-decoration: none;
+      padding: .85em 1.45em; min-height: 48px; border-radius: 999px; border: 2px solid var(--edge);
+      box-shadow: 0 4px 0 var(--edge);
+      transition: transform .18s cubic-bezier(.34, 1.4, .64, 1), box-shadow .18s ease, background-color .18s ease;
+    }
+    .btn .ico { width: 1.2em; height: 1.2em; flex: none; }
+    .btn:hover { transform: translateY(-2px); box-shadow: 0 6px 0 var(--edge); }
+    .btn:active { transform: translateY(3px); box-shadow: 0 1px 0 var(--edge); }
+    .btn-xl { font-size: clamp(1.2rem, 2vw, 1.45rem); padding: .85em 1.6em; }
+    .btn-lg { font-size: 1.15rem; padding: .8em 1.3em .8em .8em; min-height: 56px; }
+
+    .btn-green { background: var(--green); color: var(--white); }
+    .btn-green:hover { background: var(--green-hover); }
+    .btn-light { background: var(--white); color: var(--ink); }
+    .btn-ghost { background: transparent; color: var(--white); border-color: rgba(255, 255, 255, .6); box-shadow: 0 4px 0 rgba(255, 255, 255, .22); }
+    .btn-ghost:hover { background: rgba(255, 255, 255, .08); box-shadow: 0 6px 0 rgba(255, 255, 255, .22); }
+    .btn-ghost:active { box-shadow: 0 1px 0 rgba(255, 255, 255, .22); }
+
+    /* Main call to action: "Get your free consultation" (opens WhatsApp) */
+    .btn-cta { background: var(--mint); color: var(--ink); font-weight: 800; box-shadow: 0 4px 0 var(--edge), 0 0 0 6px rgba(143, 211, 191, .16); }
+    .btn-cta:hover { background: var(--mint-hover); box-shadow: 0 6px 0 var(--edge), 0 0 0 9px rgba(143, 211, 191, .22); }
+    .btn-cta:active { box-shadow: 0 1px 0 var(--edge), 0 0 0 6px rgba(143, 211, 191, .16); }
+    .btn-cta:focus-visible { outline: 3px solid var(--white); outline-offset: 5px; }
+    .btn-cta.btn-xl { font-size: clamp(1.3rem, 2.2vw, 1.6rem); padding: .75em 1.5em .75em .8em; min-height: 68px; }
+    .btn-cta .lbl-short { display: none; }
+    .wa-icon { display: grid; place-items: center; flex: none; width: 1.75em; height: 1.75em; border-radius: 50%; background: var(--ink); color: var(--mint); }
+    .wa-icon .ico { width: .95em; height: .95em; }
+    .wa-icon.has-img { background: transparent; }
+    .wa-icon img { width: 1.5em; height: 1.5em; }
+
+    @media (max-width: 480px) {
+      .btn-cta.btn-xl, .btn-lg { font-size: 1.1rem; gap: .5em; padding: .7em 1em .7em .6em; min-height: 64px; }
+      .btn-lg { min-height: 58px; }
+      .hero-action .btn-xl, .final .btn-cta { width: 100%; }
+    }
+
+    /* =====================================================================
+       4. Header
+       ===================================================================== */
+    .site-header { position: relative; z-index: 30; }
+    @media (min-width: 760px) { .site-header { position: sticky; top: 0; border-bottom: 1px solid rgba(255, 255, 255, .08); } }
+    .header-in { display: flex; align-items: center; gap: 28px; min-height: 76px; }
+    .brand { margin-right: auto; text-decoration: none; line-height: 1.05; display: flex; flex-direction: column; justify-content: center; min-height: 44px; }
+    .brand strong { display: block; font-weight: 800; font-size: 1.35rem; font-stretch: 85%; white-space: nowrap; }
+    .brand span { font-size: .85rem; color: var(--on-ink); }
+    .nav { display: none; gap: 28px; font-weight: 600; }
+    .nav a { text-decoration: none; display: inline-flex; align-items: center; min-height: 44px; }
+    .nav a:hover { text-decoration: underline; }
+    .header-cta { font-size: .95rem; padding: .45em 1.05em .45em .5em; min-height: 46px; white-space: nowrap; }
+    @media (min-width: 960px) { .nav { display: flex; } }
+    @media (max-width: 560px) { .header-cta .lbl-long { display: none; } .header-cta .lbl-short { display: inline; } }
+    @media (max-width: 400px) {
+      .header-in { gap: 12px; }
+      .brand strong { font-size: 1.15rem; }
+      .header-cta { padding: .45em 1em; }
+      .header-cta .wa-icon { display: none; }
+    }
+
+    /* =====================================================================
+       5. Hero: intro, chips, photo, route, consultation form
+       ===================================================================== */
+    .hero { padding-block: clamp(24px, 4.5vw, 64px) clamp(56px, 8vw, 110px); }
+    @media (max-width: 340px) { .hero { padding-top: 16px; } }
+    .hero-grid { display: grid; gap: 28px; align-items: start; }
+    @media (min-width: 960px) { .hero-grid { grid-template-columns: 1.35fr .65fr; gap: 80px; } }
+    .hero h1 {
+      font-weight: 800; font-stretch: 75%; font-variation-settings: "opsz" 96;
+      font-size: clamp(2.9rem, 8.4vw, 7.2rem); line-height: .88; letter-spacing: -.018em; max-width: 11ch;
+    }
+    .hero .lede { margin-top: 16px; max-width: 46ch; color: var(--on-ink); font-size: clamp(1.0625rem, 1.3vw, 1.25rem); }
+    @media (min-width: 760px) { .hero .lede { margin-top: 28px; } }
+
+    /* "I'm looking to" chips: one row from 320px up (44px tall, text never below 13px) */
+    .intent { border: 0; padding: 0; margin: 18px 0 14px; min-width: 0; }
+    @media (min-width: 760px) { .intent { margin-top: 32px; } }
+    .intent legend { font-weight: 600; font-size: .9375rem; padding: 0; margin-bottom: 8px; }
+    .chips { display: flex; flex-wrap: wrap; gap: 8px; }
+    .chip input { position: absolute; opacity: 0; width: 1px; height: 1px; }
+    .chip label {
+      display: inline-flex; align-items: center; min-height: 44px; cursor: pointer;
+      font-weight: 600; font-size: .9375rem; padding: .5em 1.05em; border-radius: 999px;
+      border: 1.5px solid rgba(255, 255, 255, .35); transition: background-color .2s, color .2s, border-color .2s;
+    }
+    .chip label:hover { border-color: var(--white); }
+    .chip input:checked + label { background: var(--white); color: var(--ink); border-color: var(--white); }
+    .chip input:focus-visible + label { outline: 3px solid var(--mint); outline-offset: 3px; }
+    @media (max-width: 359px) {
+      .chips { gap: 6px; }
+      .chip label { padding: .45em .62em; font-size: .8125rem; }                  /* 13px */
+    }
+    @media (min-width: 360px) and (max-width: 419px) {
+      .chip label { padding: .5em .75em; font-size: .875rem; }                    /* 14px */
+    }
+
+    /* Reassurance line and message preview under the main button */
+    .cta-reassure { display: flex; align-items: flex-start; gap: 8px; margin-top: 12px; font-weight: 500; font-size: .9375rem; line-height: 1.45; color: var(--white); }
+    .cta-reassure .tick { width: 18px; height: 18px; flex: none; margin-top: .2em; color: var(--mint); }
+    .msg-preview { margin-top: 6px; font-size: .8125rem; line-height: 1.45; color: var(--on-ink); max-width: 52ch; }
+    .msg-preview q { font-style: italic; }
+
+    /* Hero photo: edge to edge (16:9) on phones, framed (4:5) with a caption on desktop */
+    .hero-photo { margin: 0 calc(-1 * var(--gutter)); }
+    .hero-photo .photo { aspect-ratio: 16 / 9; border-radius: 0; background: linear-gradient(180deg, #2A4052, #1A2E3F); overflow: hidden; }
+    .hero-photo figcaption { margin-top: 10px; padding-inline: var(--gutter); font-size: .88rem; color: var(--on-ink); }
+    @media (min-width: 960px) {
+      .hero-photo { margin: 8px 0 0; }
+      .hero-photo .photo { aspect-ratio: 4 / 5; border-radius: var(--r); }
+      .hero-photo figcaption { padding: 10px 0 0; border-top: 1px solid rgba(255, 255, 255, .14); }
+    }
+
+    /* Route: home > JB CIQ > Singapore.
+       Phones: vertical timeline. 760px and up: horizontal line. Dashed = road, solid = rail. */
+    .route { margin: 48px 0 0; }
+    .rt { list-style: none; margin: 0; padding: 0; --line: rgba(255, 255, 255, .9); }
+    .rt li { position: relative; padding-left: 42px; }
+    .rt-stop::before {                                    /* stop dot */
+      content: ""; position: absolute; left: 0; top: 2px; z-index: 1;
+      width: 22px; height: 22px; border-radius: 50%; background: var(--ink); border: 4px solid var(--white);
+    }
+    .rt-ciq::before { background: var(--mint); }
+    .rt-txt strong { display: block; font-weight: 600; font-size: 1.0625rem; line-height: 1.25; letter-spacing: -.01em; }
+    .rt-txt span { display: block; font-size: .9rem; color: var(--on-ink); line-height: 1.35; margin-top: 2px; }
+    .rt-seg { padding-block: 18px; min-height: 64px; display: flex; flex-wrap: wrap; align-items: center; gap: 6px 10px; }
+    .rt-len { font-size: .875rem; font-weight: 500; color: var(--on-ink); }
+    .rt-water { font-size: .8rem; color: var(--on-ink); background: var(--ink-2); padding: 3px 10px; border-radius: 999px; }
+    /* Line pieces, from each stop down to the next */
+    .rt-home::after, .rt-ciq::after, .rt-seg::after { content: ""; position: absolute; left: 9.5px; width: 3px; top: 0; bottom: 0; transform-origin: top center; }
+    .rt-home::after, .rt-ciq::after { top: 12px; }
+    .rt-home::after, .rt-road::after { background: repeating-linear-gradient(180deg, var(--line) 0 7px, transparent 7px 12px); }
+    .rt-ciq::after, .rt-rail::after { left: 8px; width: 6px; background: var(--line); border-radius: 3px; }
+    .route figcaption { margin-top: 24px; color: var(--on-ink); max-width: 72ch; }
+    @media (min-width: 760px) {
+      .route { margin-top: clamp(56px, 7vw, 96px); }
+      .rt { display: grid; grid-template-columns: 22px 1fr 22px 1.25fr 22px; align-items: start; padding: 38px 0 64px; }
+      .rt li { padding-left: 0; height: 26px; }
+      .rt-stop::before { top: 0; }
+      .rt-home::after, .rt-ciq::after { display: none; }
+      .rt-seg { display: block; padding: 0; min-height: 0; isolation: isolate; }
+      .rt-seg::after { top: 10px; bottom: auto; left: -2px; right: -2px; width: auto; height: 3px; transform-origin: left center; }
+      .rt-road::after { background: repeating-linear-gradient(90deg, var(--line) 0 12px, transparent 12px 20px); }
+      .rt-rail::after { top: 8px; left: -2px; width: auto; height: 6px; }
+      .rt-len { position: absolute; left: 0; right: 0; bottom: calc(100% + 12px); text-align: center; }
+      .rt-water {                                        /* the strait, as a band behind the rail line */
+        position: absolute; left: 16%; right: 12%; top: -20px; height: 64px; z-index: -1;
+        display: flex; align-items: flex-end; justify-content: center; padding: 0 0 5px; border-radius: var(--r);
+      }
+      .rt-txt { position: absolute; top: 36px; white-space: nowrap; }
+      .rt-home .rt-txt { left: 0; }
+      .rt-ciq .rt-txt { left: 11px; transform: translateX(-50%); text-align: center; }
+      .rt-sg .rt-txt { right: 0; text-align: right; }
+      .rt-txt strong { font-weight: 700; font-size: 1.0625rem; }
+    }
+
+    /* Consultation block: heading, open/close button, divider in the route style */
+    .consult { position: relative; margin-top: clamp(56px, 9vw, 120px); padding-top: clamp(48px, 7vw, 88px); text-align: center; }
+    .consult::before { content: ""; position: absolute; top: 0; left: 0; width: 36%; height: 2px; background: repeating-linear-gradient(90deg, rgba(255, 255, 255, .28) 0 8px, transparent 8px 14px); }
+    .consult::after {
+      content: ""; position: absolute; top: -4px; left: calc(36% + 6px); right: 0; height: 10px;
+      background: radial-gradient(circle, var(--mint) 0 3.5px, transparent 4px) 0 50% / 10px 10px no-repeat,
+                  linear-gradient(rgba(255, 255, 255, .28), rgba(255, 255, 255, .28)) 16px 50% / 100% 2px no-repeat;
+    }
+    .consult h2 { margin-inline: auto; }
+    .consult .lede { margin: 14px auto 0; color: var(--on-ink); }
+    .consult-toggle { margin-top: 24px; font-size: .9375rem; padding: .7em 1.1em .7em 1.25em; gap: .45em; }
+    .consult-toggle .chev { width: 1.1em; height: 1.1em; flex: none; transition: transform .25s ease; }
+    .consult-toggle[aria-expanded="true"] .chev { transform: rotate(180deg); }
+    .form-fallback { margin: 18px auto 0; font-size: .95rem; color: var(--on-ink); }
+    .form-fallback a { color: var(--white); display: inline-flex; align-items: center; min-height: 44px; }
+
+    /* Form card and fields */
+    .form-card {
+      max-width: 600px; margin: clamp(32px, 4vw, 48px) auto 0; text-align: left;
+      background: var(--white); color: var(--ink); border-radius: var(--r); padding: clamp(20px, 4.5vw, 48px);
+      --focus: var(--green); --edge: var(--ink);
+    }
+    .lf-note { font-size: .92rem; color: var(--slate); margin-bottom: 28px; }
+    .lf-section + .lf-section { margin-top: 36px; padding-top: 32px; border-top: 1px solid var(--line); }
+    .lf-section-title { font-weight: 700; font-size: 1rem; font-variation-settings: "opsz" 16; color: var(--green); margin: 0 0 18px; }
+    .lf-q + .lf-q { margin-top: 22px; }
+    .lf-label, .lf-group legend { display: block; font-weight: 600; font-size: 1rem; line-height: 1.35; margin-bottom: 8px; padding: 0; }
+    .lf-opt { font-weight: 400; color: var(--slate); }
+    .lf-hint { font-size: .88rem; color: var(--slate); margin: -2px 0 8px; }
+    .lf-input {
+      display: block; width: 100%; font: 400 1.05rem/1.4 var(--font); color: var(--ink);   /* 16px+ stops iPhones zooming in */
+      background: var(--white); border: 1.5px solid var(--field); border-radius: 8px; padding: .8em 1em;
+      transition: border-color .15s ease, box-shadow .15s ease, background-color .15s ease;
+    }
+    .lf-input::placeholder { color: #6B757E; }
+    .lf-input:hover { border-color: var(--ink); }
+    .lf-input:focus { outline: none; border-color: var(--green); box-shadow: 0 0 0 4px rgba(30, 107, 92, .18); }
+    .lf-group { border: 0; margin: 0; padding: 0; min-width: 0; }
+    .lf-choices { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+    @media (max-width: 340px) { .lf-choices { grid-template-columns: 1fr; } }
+    .lf-choice {
+      display: flex; align-items: center; gap: 8px; min-height: 48px; padding: .6em .65em; font-size: .9375rem; line-height: 1.3;
+      border: 1.5px solid var(--field); border-radius: 8px; background: var(--white); cursor: pointer;
+      transition: border-color .15s ease, background-color .15s ease;
+    }
+    .lf-choice:hover { border-color: var(--ink); }
+    .lf-choice input { width: 18px; height: 18px; margin: 0; flex: none; accent-color: var(--green); cursor: pointer; }
+    .lf-choice:has(input:checked) { border-color: var(--green); background: #EAF4F1; }
+    .lf-choice:has(input:focus-visible) { border-color: var(--green); box-shadow: 0 0 0 4px rgba(30, 107, 92, .18); }
+    .lf-other { margin-top: 10px; }
+
+    /* Optional questions: a closed section inside the form */
+    .lf-more { margin-top: 28px; border-top: 1px solid var(--line); }
+    .lf-more > summary {
+      list-style: none; cursor: pointer; display: flex; align-items: center; justify-content: space-between; gap: 12px;
+      min-height: 52px; padding: 14px 0 6px; font-weight: 600; font-size: 1rem; color: var(--green);
+    }
+    .lf-more > summary::-webkit-details-marker { display: none; }
+    .lf-more > summary::after {
+      content: ""; flex: none; width: 32px; height: 32px; border-radius: 50%;
+      background: linear-gradient(var(--green), var(--green)) center / 12px 2px no-repeat,
+                  linear-gradient(var(--green), var(--green)) center / 2px 12px no-repeat, #EAF4F1;
+      transition: transform .25s ease;
+    }
+    .lf-more[open] > summary::after { transform: rotate(45deg); }
+    .lf-more .lf-opt { color: var(--slate); }
+    .lf-more-body { padding-top: 12px; }
+
+    /* Errors, sending state, thank-you message */
+    .has-error .lf-input, .has-error .lf-choice { border-color: var(--error); }
+    .has-error .lf-input, .other-error .lf-other { background: #FFF8F7; }
+    .other-error .lf-other { border-color: var(--error); }
+    .lf-error { display: flex; gap: 6px; align-items: flex-start; color: var(--error); font-size: .9rem; line-height: 1.4; margin-top: 8px; }
+    .lf-error::before { content: "!"; flex: none; display: grid; place-items: center; width: 17px; height: 17px; margin-top: 1px; border-radius: 50%; background: var(--error); color: var(--white); font-weight: 800; font-size: .72rem; }
+    .form-error { margin-top: 24px; padding: 12px 16px; border-radius: 8px; background: #FFF4F2; color: #8C1D17; font-size: .95rem; }
+    .lf-submit { width: 100%; margin-top: 32px; }
+    .lf-submit[disabled] { cursor: progress; opacity: .85; transform: none; box-shadow: 0 4px 0 var(--edge); }
+    .spinner { display: none; width: 1.05em; height: 1.05em; border-radius: 50%; border: 2.5px solid rgba(255, 255, 255, .35); border-top-color: var(--white); animation: spin .8s linear infinite; }
+    .is-loading .spinner { display: inline-block; }
+    @keyframes spin { to { transform: rotate(360deg); } }
+    .lf-thanks { text-align: center; padding-block: clamp(12px, 3vw, 28px); }
+    .lf-thanks:focus { outline: none; }
+    .lf-check { display: grid; place-items: center; width: 64px; height: 64px; margin: 0 auto 20px; border-radius: 50%; background: var(--mint); color: var(--ink); }
+    .lf-check svg { width: 30px; height: 30px; }
+    .lf-thanks h3 { font-weight: 700; font-variation-settings: "opsz" 64; font-size: clamp(1.5rem, 3vw, 1.875rem); line-height: 1.1; letter-spacing: -.02em; }
+    .lf-thanks p { margin: 14px auto 0; color: var(--slate); max-width: 40ch; }
+    .lf-thanks .btn { margin-top: 26px; }
+
+    /* =====================================================================
+       6. Why JB: fact sheet
+       ===================================================================== */
+    .why { padding-block: var(--section); }
+    .why-head { display: grid; gap: 16px; }
+    @media (min-width: 960px) { .why-head { grid-template-columns: 1.2fr .8fr; align-items: end; } }
+    .claims { margin-top: clamp(32px, 5vw, 64px); border-top: 2px solid var(--ink); }
+    .claim { display: grid; gap: 10px; padding-block: 24px; border-bottom: 1px solid var(--line); }
+    .fig {
+      display: block; font-weight: 800; font-stretch: 75%; font-variation-settings: "opsz" 96;
+      font-size: clamp(2rem, 3.6vw, 3rem); line-height: .95; letter-spacing: -.015em;
+    }
+    .claim-text { font-weight: 400; font-size: clamp(1rem, 1.2vw, 1.125rem); line-height: 1.5; max-width: 50ch; }
+    .claim .small { margin-top: 6px; color: var(--slate); font-size: .8125rem; }
+    @media (min-width: 760px) {
+      .claim { grid-template-columns: minmax(200px, .75fr) 1.6fr; column-gap: 48px; row-gap: 0; align-items: baseline; padding-block: 32px; }
+      .fig { grid-row: span 2; }
+      .claim-text, .claim .small { grid-column: 2; }
+    }
+
+    /* =====================================================================
+       7. In the news
+       ===================================================================== */
+    .press { padding-block: clamp(48px, 7vw, 88px); }
+    .press-in { display: grid; gap: 24px; }
+    @media (min-width: 960px) { .press-in { grid-template-columns: .3fr .7fr; gap: 64px; } }
+    .press h3 { font-size: clamp(1.25rem, 1.8vw, 1.5rem); font-weight: 700; letter-spacing: -.02em; }
+    .press ul { list-style: none; margin: 0; padding: 0; }
+    .press li + li { border-top: 1px solid rgba(15, 30, 43, .18); }
+    .press a { display: grid; grid-template-columns: 9em 1fr; gap: 16px; padding: 16px 0; text-decoration: none; }
+    .press a:hover .press-h { text-decoration: underline; }
+    .press-o { font-weight: 700; font-size: .875rem; color: var(--green); padding-top: .15em; }
+    .press-h { font-size: 1rem; line-height: 1.45; }
+    @media (max-width: 560px) { .press a { grid-template-columns: 1fr; gap: 2px; } }
+
+    /* =====================================================================
+       8. Projects
+       Phones: framed cards that swipe sideways and snap, next card peeking in.
+       900px and up: side by side.
+       ===================================================================== */
+    .projects { padding-block: var(--section); }
+    .proj-nav { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin-top: 20px; }
+    .proj-count { font-size: .9375rem; font-weight: 600; color: var(--slate); font-variant-numeric: tabular-nums; }
+    .proj-arrows { display: flex; gap: 8px; }
+    .proj-btn {
+      display: grid; place-items: center; width: 44px; height: 44px; padding: 0; cursor: pointer;
+      border-radius: 50%; border: 1.5px solid var(--ink); background: var(--white); color: var(--ink);
+      transition: background-color .15s ease, opacity .15s ease;
+    }
+    .proj-btn svg { width: 20px; height: 20px; }
+    .proj-btn:hover:not(:disabled) { background: var(--sand); }
+    .proj-btn:disabled { opacity: .35; cursor: default; }
+    .proj-grid {
+      display: grid; grid-auto-flow: column; grid-auto-columns: 86%; gap: 12px; margin-top: 14px;
+      margin-inline: calc(-1 * var(--gutter)); padding: 2px var(--gutter) 6px; scroll-padding-inline: var(--gutter);
+      overflow-x: auto; scroll-snap-type: x mandatory; overscroll-behavior-x: contain; scrollbar-width: none;
+    }
+    .proj-grid::-webkit-scrollbar { display: none; }
+    .proj {
+      display: flex; flex-direction: column; scroll-snap-align: start; scroll-snap-stop: always;
+      background: var(--white); border: 1px solid #C4CAC5; border-radius: var(--r); padding: 12px 12px 16px;
+      box-shadow: 0 1px 2px rgba(15, 30, 43, .06);
+    }
+    .proj .photo { aspect-ratio: 16 / 9; border-radius: 4px; }
+    .proj-body { display: flex; flex-direction: column; flex: 1; padding: 0 4px; transition: opacity .25s ease; }
+    /* The peeking card shows only its frame and photo, so no text appears cut off */
+    @media (max-width: 899px) { .proj-grid.is-swipe .proj:not(.is-current) .proj-body { opacity: 0; } }
+    .proj h3 { font-weight: 700; font-variation-settings: "opsz" 48; font-size: clamp(1.2rem, 1.6vw, 1.4rem); line-height: 1.2; margin-top: 14px; letter-spacing: -.015em; }
+    .proj .lede { margin-top: 4px; font-size: .9375rem; line-height: 1.5; color: var(--slate); }
+    .facts { margin: 14px 0 18px; flex: 1; }                                  /* one column of "label: value" rows */
+    .facts div { display: grid; grid-template-columns: 6.25rem 1fr; gap: 12px; padding: 9px 0; border-top: 1px solid var(--line); }
+    .facts div:last-child { border-bottom: 1px solid var(--line); }
+    .facts dt { font-size: .8125rem; font-weight: 600; color: var(--slate); padding-top: .12em; }
+    .facts dd { margin: 0; font-size: .9375rem; font-weight: 400; line-height: 1.4; }
+    .proj .btn { align-self: flex-start; }
+    .dev-note { margin-top: 24px; color: var(--slate); font-size: .95rem; }
+    @media (min-width: 900px) {
+      .proj-nav { display: none; }
+      .proj-grid { grid-auto-flow: row; grid-template-columns: 1fr 1fr; gap: 32px; margin: clamp(32px, 4vw, 48px) 0 0; padding: 0; overflow: visible; }
+      .proj { padding: 16px 16px 22px; }
+      .proj-body { padding: 0 6px; }
+    }
+
+    /* =====================================================================
+       9. Split layout and accordions (perks, Q&A)
+       ===================================================================== */
+    .perks, .faq { padding-block: var(--section); }
+    .split { display: grid; gap: 32px; }
+    @media (min-width: 960px) { .split { grid-template-columns: .85fr 1.15fr; gap: 80px; } }
+    .split-head .lede { margin-top: 22px; }
+    .split-head .small { margin-top: 14px; }
+    .split-head .btn { margin-top: 30px; }
+
+    .acc details { border-top: 1px solid currentColor; }
+    .acc details:last-child { border-bottom: 1px solid currentColor; }
+    .acc summary {
+      list-style: none; cursor: pointer; display: flex; justify-content: space-between; align-items: center; gap: 20px;
+      min-height: 60px; padding: 14px 0; font-weight: 500; font-size: clamp(1.0625rem, 1.4vw, 1.25rem); line-height: 1.3; letter-spacing: -.005em;
+    }
+    .acc summary::-webkit-details-marker { display: none; }
+    .acc summary::after {                                  /* plus icon that turns into a cross */
+      content: ""; flex: none; width: 32px; height: 32px; border-radius: 50%;
+      background: linear-gradient(var(--white), var(--white)) center / 14px 2.5px no-repeat,
+                  linear-gradient(var(--white), var(--white)) center / 2.5px 14px no-repeat, var(--ink);
+      transition: transform .3s cubic-bezier(.34, 1.4, .64, 1);
+    }
+    .acc details[open] summary::after { transform: rotate(45deg); }
+    .acc summary:hover::after { transform: scale(1.08); }
+    .acc details[open] summary:hover::after { transform: rotate(45deg) scale(1.08); }
+    .acc details::details-content { block-size: 0; overflow: hidden; transition: block-size .35s ease, content-visibility .35s allow-discrete; }
+    .acc details[open]::details-content { block-size: auto; }
+    .acc-body { padding-bottom: 20px; font-size: 1rem; max-width: 56ch; color: var(--slate); }
+    .acc-sm summary { font-size: clamp(1rem, 1.3vw, 1.125rem); }
+
+    /* =====================================================================
+       10. Early access: scrolling developer logo row
+       One set is at least the screen width, so the loop never shows a gap.
+       ===================================================================== */
+    .early { padding-block: var(--section); }
+    .early .lede { margin-top: 16px; }
+    .marquee { margin: clamp(28px, 4vw, 48px) 0; overflow: hidden; }
+    .marquee-track { display: flex; width: max-content; }
+    .devs { list-style: none; margin: 0; padding: 0 12px 0 0; min-width: 100vw; display: flex; gap: 12px; justify-content: space-around; }
+    .logo {
+      flex: none; display: flex; align-items: center; justify-content: center;
+      height: clamp(76px, 8vw, 104px); min-width: clamp(148px, 15vw, 204px); padding: 0 clamp(20px, 2.4vw, 32px);
+      background: var(--white); border: 1px solid rgba(15, 30, 43, .14); border-radius: var(--r);
+    }
+    .logo img { width: auto; max-width: 100%; max-height: 46%; object-fit: contain; filter: grayscale(1); opacity: .8; transition: filter .3s ease, opacity .3s ease; }
+    .logo:hover img { filter: none; opacity: 1; }
+    .logo-name { font-weight: 700; font-size: clamp(1.05rem, 1.8vw, 1.35rem); letter-spacing: -.01em; white-space: nowrap; }
+    .logo.loaded .logo-name { position: absolute; width: 1px; height: 1px; margin: -1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+    .logo-more { background: transparent; border-style: dashed; border-color: rgba(15, 30, 43, .3); }
+    .logo-more .logo-name { font-weight: 500; font-size: .98rem; color: var(--slate); }
+
+    /* =====================================================================
+       11. Yield check
+       ===================================================================== */
+    .yield { padding-block: var(--section); }
+    .yield .lede { margin-top: 22px; }
+    .yield-grid { display: grid; gap: 36px; margin-top: clamp(32px, 5vw, 56px); align-items: start; }
+    @media (min-width: 960px) { .yield-grid { grid-template-columns: 1fr 1fr; gap: 72px; } }
+    /* Phones: compact result that stays in view while dragging */
+    .yield-mini {
+      display: flex; align-items: baseline; justify-content: space-between; gap: 12px; margin-bottom: 20px;
+      padding: 12px 16px; border-radius: var(--r); background: var(--ink); color: var(--white);
+      position: sticky; top: 8px; z-index: 2;
+    }
+    .yield-mini span { font-weight: 600; font-size: .9375rem; }
+    .yield-mini strong { font-weight: 800; font-stretch: 80%; font-variation-settings: "opsz" 96; font-size: 2rem; line-height: 1; color: var(--mint); font-variant-numeric: tabular-nums; }
+    @media (min-width: 960px) { .yield-mini { display: none; } }
+    /* Sliders */
+    .field + .field { margin-top: 28px; }
+    .field-top { display: flex; justify-content: space-between; align-items: baseline; gap: 12px; }
+    .field label { font-weight: 700; }
+    .field output { font-weight: 700; font-size: 1.25rem; }
+    input[type="range"] { -webkit-appearance: none; appearance: none; width: 100%; height: 44px; margin: 6px 0 0; background: transparent; cursor: pointer; --fill: 50%; }
+    input[type="range"]::-webkit-slider-runnable-track { height: 8px; border-radius: 4px; background: linear-gradient(90deg, var(--green) var(--fill), var(--field) var(--fill)); }
+    input[type="range"]::-moz-range-track { height: 8px; border-radius: 4px; background: var(--field); }
+    input[type="range"]::-moz-range-progress { height: 8px; border-radius: 4px; background: var(--green); }
+    input[type="range"]::-webkit-slider-thumb { -webkit-appearance: none; width: 30px; height: 30px; margin-top: -11px; border-radius: 50%; background: var(--white); border: 3px solid var(--ink); box-shadow: 0 3px 0 var(--ink); transition: transform .2s cubic-bezier(.34, 1.4, .64, 1); }
+    input[type="range"]::-moz-range-thumb { width: 24px; height: 24px; border-radius: 50%; background: var(--white); border: 3px solid var(--ink); }
+    input[type="range"]:hover::-webkit-slider-thumb { transform: scale(1.1); }
+    .range-ends { display: flex; justify-content: space-between; font-size: .88rem; color: var(--slate); }
+    /* Result card */
+    .result { border-radius: var(--r); padding: clamp(22px, 3vw, 40px); }
+    .result-label { font-weight: 700; }
+    .result-num { font-weight: 800; font-stretch: 75%; font-variation-settings: "opsz" 96; font-size: clamp(2.5rem, 5.6vw, 4.5rem); line-height: .9; letter-spacing: -.02em; color: var(--mint); }
+    .bar { position: relative; height: 10px; border-radius: 5px; background: var(--ink-2); margin: 26px 0 8px; overflow: hidden; }
+    .bar-fill { position: absolute; inset: 0 auto 0 0; background: var(--mint); border-radius: 5px; transition: width .35s cubic-bezier(.2, .9, .2, 1); }
+    .bar-scale { display: flex; justify-content: space-between; font-size: .88rem; color: var(--on-ink); }
+    .result-sentence { margin-top: 18px; font-size: 1.0625rem; font-weight: 400; line-height: 1.5; }
+    .result .small { margin-top: 12px; color: var(--on-ink); }
+    .result .btn { margin-top: 26px; }
+
+    /* =====================================================================
+       12. About
+       ===================================================================== */
+    .about { padding-block: var(--section); }
+    .about-grid { display: grid; gap: 28px; align-items: center; }
+    @media (min-width: 860px) { .about-grid { grid-template-columns: .8fr 1.2fr; gap: 80px; } }
+    .portrait { aspect-ratio: 4 / 5; max-width: 440px; }
+    .about .lede { margin-top: 22px; }
+    .about p + p { margin-top: 16px; }
+    .about-link { display: inline-flex; align-items: center; min-height: 44px; }
+    .creds { margin-top: 18px; font-weight: 600; color: var(--slate); }
+
+    /* =====================================================================
+       13. How we'd work together
+       ===================================================================== */
+    .how { padding-block: var(--section); }
+    .steps { list-style: none; padding: 0; margin: clamp(32px, 5vw, 56px) 0 0; display: grid; gap: 32px; }
+    @media (min-width: 820px) { .steps { grid-template-columns: repeat(3, 1fr); } }
+    .step { border-top: 2px solid var(--ink); padding-top: 18px; }
+    .step-num { display: block; font-weight: 800; font-stretch: 75%; font-variation-settings: "opsz" 96; font-size: clamp(2.25rem, 3.4vw, 3rem); line-height: .85; color: var(--green); }
+    .step h3 { margin-top: 12px; font-size: 1.125rem; letter-spacing: -.01em; }
+    .step p { margin-top: 8px; color: var(--slate); }
+
+    /* =====================================================================
+       14. Join the team and final call to action
+       ===================================================================== */
+    .join { padding-block: clamp(48px, 7vw, 96px); }
+    .join-in { display: grid; gap: 24px; align-items: center; }
+    @media (min-width: 860px) { .join-in { grid-template-columns: 1fr auto; } }
+    .join h2 { font-size: clamp(1.375rem, 2.2vw, 1.875rem); max-width: none; }
+    .join p { margin-top: 12px; color: var(--slate); }
+
+    .final { padding-block: clamp(72px, 12vw, 168px); }
+    .final h2 { font-size: clamp(2rem, 4.6vw, 3.75rem); max-width: 14ch; line-height: 1.04; letter-spacing: -.03em; }
+    .final .lede { margin-top: 28px; color: var(--on-ink); }
+    .final .btn { margin-top: 40px; }
+
+    /* =====================================================================
+       15. Footer
+       ===================================================================== */
+    .site-footer { padding-block: 56px; background: var(--ink-3); color: var(--white); --focus: var(--mint); }
+    @media (max-width: 759px) { .site-footer { padding-bottom: 120px; } }   /* room for the sticky bar */
+    .site-footer .muted { color: var(--on-ink); }
+    .foot { display: grid; gap: 28px; }
+    @media (min-width: 860px) { .foot { grid-template-columns: 1.4fr 1fr 1fr; } }
+    .foot strong { display: block; font-weight: 700; font-size: 1.25rem; }
+    .foot ul { list-style: none; margin: 0; padding: 0; display: grid; gap: 4px; font-weight: 600; }
+    .foot ul a { display: inline-flex; align-items: center; min-height: 44px; }
+    .foot-fine { margin-top: 44px; padding-top: 24px; border-top: 1px solid rgba(255, 255, 255, .12); max-width: none; }
+
+    /* =====================================================================
+       16. Mobile sticky call-to-action bar (phones only)
+       ===================================================================== */
+    .mbar {
+      position: fixed; left: 0; right: 0; bottom: 0; z-index: 40;
+      padding: 12px 16px calc(14px + env(safe-area-inset-bottom, 0px));   /* clears the iPhone home bar */
+      background: var(--ink); --edge: #6B7C8C; --focus: var(--white);
+      transform: translateY(115%); visibility: hidden;
+      transition: transform .3s cubic-bezier(.2, .9, .2, 1), visibility 0s linear .3s;
+    }
+    .mbar.show { transform: none; visibility: visible; transition: transform .3s cubic-bezier(.2, .9, .2, 1); }
+    .mbar .btn { width: 100%; }
+    @media (min-width: 760px) { .mbar { display: none; } }
+
+    /* =====================================================================
+       17. Motion (all off when the visitor prefers reduced motion)
+       ===================================================================== */
+    @media (prefers-reduced-motion: no-preference) {
+      /* Hero entrance: one short, quiet rise; text is readable immediately */
+      .hero h1, .hero .lede, .hero-action { animation: rise .6s cubic-bezier(.2, .9, .2, 1) both; }
+      .hero .lede { animation-delay: .08s; }
+      .hero-action { animation-delay: .16s; }
+      @keyframes rise { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: none; } }
+
+      /* Two gentle pulses on the hero call to action */
+      #hero-cta { animation: cta-ping 1.5s ease-out 1.6s 2; }
+      @keyframes cta-ping {
+        0%   { box-shadow: 0 4px 0 var(--edge), 0 0 0 0 rgba(143, 211, 191, .6); }
+        100% { box-shadow: 0 4px 0 var(--edge), 0 0 0 20px rgba(143, 211, 191, 0); }
+      }
+
+      /* Scroll reveals (the route and project cards are handled separately) */
+      .js [data-reveal]:where(:not(.route, .proj)) { opacity: 0; transform: translateY(28px); transition: opacity .6s ease, transform .7s cubic-bezier(.2, .9, .2, 1); }
+      .js [data-reveal].in { opacity: 1; transform: none; }
+
+      /* Route draws itself once: road first, then rail */
+      .js .route .rt-home::after, .js .route .rt-ciq::after, .js .route .rt-seg::after { transform: scaleY(0); }
+      .js .route .rt-stop::before { transform: scale(0); }
+      .js .route .rt-len, .js .route .rt-water { opacity: 0; }
+      .js .route.in .rt-stop::before { transform: none; transition: transform .35s cubic-bezier(.2, .9, .3, 1.5) .2s; }
+      .js .route.in .rt-ciq::before { transition-delay: 1.05s; }
+      .js .route.in .rt-sg::before { transition-delay: 1.8s; }
+      .js .route.in .rt-home::after, .js .route.in .rt-road::after { transform: none; transition: transform .45s cubic-bezier(.5, 0, .7, 1) .35s; }
+      .js .route.in .rt-road::after { transition-delay: .6s; }
+      .js .route.in .rt-ciq::after, .js .route.in .rt-rail::after { transform: none; transition: transform .45s cubic-bezier(.2, .8, .2, 1) 1.15s; }
+      .js .route.in .rt-rail::after { transition-delay: 1.35s; }
+      .js .route.in .rt-len, .js .route.in .rt-water { opacity: 1; transition: opacity .4s ease .8s; }
+      .js .route.in .rt-rail .rt-len, .js .route.in .rt-water { transition-delay: 1.5s; }
+      @media (min-width: 760px) {
+        .js .route .rt-seg::after { transform: scaleX(0); }
+        .js .route.in .rt-seg::after { transform: none; }
+      }
+
+      /* Developer logos: slow right-to-left loop, moving by one set so it repeats seamlessly. No hover pause. */
+      .marquee-track { animation: logo-slide 45s linear infinite; }
+      @keyframes logo-slide { to { transform: translateX(-50%); } }
+
+      /* Feedback */
+      #msg-preview.flash { animation: flash .4s ease; }
+      @keyframes flash { from { opacity: .2; } to { opacity: 1; } }
+      .lf-thanks:not([hidden]) { animation: rise .6s cubic-bezier(.2, .9, .2, 1) both; }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after { transition-duration: 0s !important; animation: none !important; }
+      /* Logos: a still, wrapped row instead of the scrolling one */
+      .marquee-track { width: auto; }
+      .devs { flex-wrap: wrap; justify-content: flex-start; min-width: 0; width: 100%; max-width: var(--wrap); margin-inline: auto; padding: 0 var(--gutter); }
+      .devs[aria-hidden="true"] { display: none; }
+      .logo { flex: 1 1 128px; min-width: 0; }
+    }
+  </style>
+</head>
+
+<body>
+<a class="skip" href="#main">Skip to content</a>
+
+<!-- Icon sprite: neutral chat icon used on WhatsApp buttons -->
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <symbol id="i-chat" viewBox="0 0 24 24"><path d="M12 3.5c-4.7 0-8.5 3.3-8.5 7.4 0 2.2 1.1 4.1 2.8 5.5L5.5 20.5l4.4-2.2c.7.1 1.4.2 2.1.2 4.7 0 8.5-3.3 8.5-7.4S16.7 3.5 12 3.5z" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linejoin="round"/></symbol>
+</svg>
+
+<!-- ======================================================================
+     HEADER
+     ====================================================================== -->
+<header class="site-header dark">
+  <div class="wrap header-in">
+    <!-- REPLACE: your tagline or brand name in the <span>, or delete the span -->
+    <a class="brand" href="#top"><strong>Ubai Wilson</strong><span>REPLACE: tagline</span></a>
+    <nav class="nav" aria-label="Sections">
+      <a href="#why">Why JB</a>
+      <a href="#projects">Projects</a>
+      <a href="#yield">Yield check</a>
+      <a href="#faq">Q&amp;A</a>
+    </nav>
+    <a class="btn btn-cta header-cta" data-wa="consult" href="https://wa.me/601126168047">
+      <span class="wa-icon" aria-hidden="true"><svg class="ico"><use href="#i-chat"/></svg></span>
+      <span class="lbl-long">Get your free consultation</span><span class="lbl-short">Free consultation</span>
+      <span class="sr-only"> on WhatsApp</span>
+    </a>
+  </div>
+</header>
+
+<main id="main">
+
+  <!-- ======================================================================
+       HERO: intro, main call to action, photo, route, consultation form
+       ====================================================================== -->
+  <section class="hero dark" id="top" aria-labelledby="hero-title">
+    <div class="wrap">
+
+      <!-- Intro -->
+      <div class="hero-grid">
+        <div>
+          <h1 id="hero-title">New homes in JB, by the Causeway.</h1>
+          <p class="lede">I'm Ubai Wilson, a licensed real estate negotiator in Johor Bahru. I help investors and home buyers get into new launches near the CIQ, where the RTS Link to Singapore is set to open in early 2027.</p>
+
+          <!-- Chips change the WhatsApp message; then the main call to action -->
+          <div class="hero-action">
+            <fieldset class="intent">
+              <legend>I'm looking to</legend>
+              <div class="chips">
+                <span class="chip"><input type="radio" name="intent" id="i-invest" value="invest" checked><label for="i-invest">Invest</label></span>
+                <span class="chip"><input type="radio" name="intent" id="i-live" value="live"><label for="i-live">Buy to live in</label></span>
+                <span class="chip"><input type="radio" name="intent" id="i-loan" value="loan"><label for="i-loan">Check my loan</label></span>
+              </div>
+            </fieldset>
+            <a class="btn btn-cta btn-xl" id="hero-cta" href="https://wa.me/601126168047" aria-describedby="cta-reassure msg-preview-wrap">
+              <span class="wa-icon" aria-hidden="true"><svg class="ico"><use href="#i-chat"/></svg></span>
+              <span>Get your free consultation</span><span class="sr-only"> on WhatsApp</span>
+            </a>
+            <p class="cta-reassure" id="cta-reassure">
+              <svg class="tick" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5" fill="none" stroke="currentColor" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+              Free, no obligation. I usually reply within a minute.
+            </p>
+            <p class="msg-preview" id="msg-preview-wrap">Opens WhatsApp with: <q id="msg-preview">Hi Ubai, I'd like a free consultation. I'm interested in an investment property near JB CIQ.</q></p>
+          </div>
+        </div>
+
+        <!-- Hero photo -->
+        <figure class="hero-photo">
+          <!-- REPLACE: put <img src="..." alt="Describe the photo" style="width:100%;height:100%;object-fit:cover"> inside .photo -->
+          <div class="photo" role="img" aria-label="Photo placeholder: a project near the CIQ"><span class="ph-label">Photo: a project near the CIQ</span></div>
+          <!-- REPLACE: make the caption match your photo -->
+          <figcaption>Exsim Kebun Teh, about 3 km from the CIQ</figcaption>
+        </figure>
+      </div>
+
+      <!-- Route: your home > JB CIQ > Singapore -->
+      <figure class="route" data-reveal aria-labelledby="route-cap">
+        <ol class="rt">
+          <li class="rt-stop rt-home"><div class="rt-txt"><strong>Your new home</strong><span>About 3 km to the CIQ</span></div></li>
+          <li class="rt-seg rt-road"><span class="rt-len">About 3 km by road</span></li>
+          <li class="rt-stop rt-ciq"><div class="rt-txt"><strong>JB CIQ</strong><span>Bukit Chagar RTS</span></div></li>
+          <li class="rt-seg rt-rail"><span class="rt-len">4 km by rail, about 5 min</span> <span class="rt-water">Strait of Johor</span></li>
+          <li class="rt-stop rt-sg"><div class="rt-txt"><strong>Singapore</strong><span>Woodlands North</span></div></li>
+        </ol>
+        <figcaption class="small" id="route-cap">From a new home near the CIQ to Singapore: about 3 km by road to Bukit Chagar, then 4 km by RTS rail to Woodlands North. Passenger service is targeted for early 2027. Distances are approximate.</figcaption>
+      </figure>
+
+      <!-- Free consultation: closed by default behind a button (shown open if JavaScript is off).
+           The fields are built from LEAD_FORM in the script at the bottom. -->
+      <section class="consult" id="consultation" aria-labelledby="consult-title" data-reveal>
+        <h2 id="consult-title">Free Consultation</h2>
+        <p class="lede">Fill your details below. We'll reply within 24 hours.</p>
+        <button class="btn btn-ghost consult-toggle" type="button" id="consult-toggle" aria-expanded="true" aria-controls="consult-body" hidden>
+          <span class="consult-toggle-text">Prefer a form? Leave your details</span>
+          <svg class="chev" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 9l6 6 6-6" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </button>
+
+        <div class="consult-body" id="consult-body">
+          <div class="form-card">
+            <form id="lead-form" novalidate>
+              <p class="lf-note">All fields are required unless marked optional.</p>
+              <div id="lf-fields"></div>
+              <input type="hidden" name="pageHistory" id="lf-page-history" value="0">
+              <input type="hidden" name="fvv" value="1">
+              <p class="form-error" id="lf-form-error" role="alert" hidden></p>
+              <button class="btn btn-green btn-xl lf-submit" type="submit"><span class="spinner" aria-hidden="true"></span><span class="lf-submit-text">Send my details</span></button>
+            </form>
+
+            <div class="lf-thanks" id="lf-thanks" tabindex="-1" hidden>
+              <span class="lf-check" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M5 12.5l4.5 4.5L19 7.5" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+              <h3>You’re officially in! 🎉</h3>
+              <p>We'll reply within 24 hours. For a faster answer, message me on WhatsApp.</p>
+              <a class="btn btn-green" data-wa="general" href="https://wa.me/601126168047"><svg class="ico" aria-hidden="true"><use href="#i-chat"/></svg>WhatsApp me</a>
+            </div>
+
+            <noscript><p>This form needs JavaScript. Please use the link below instead.</p></noscript>
+          </div>
+          <p class="form-fallback">Having trouble? <a href="https://forms.gle/L5bvyqZkGLQ8wNfs9" target="_blank" rel="noopener">Open the form in a new tab</a></p>
+        </div>
+      </section>
+
+    </div>
+  </section>
+
+  <!-- ======================================================================
+       WHY JB
+       ====================================================================== -->
+  <section class="why" id="why" aria-labelledby="why-title">
+    <div class="wrap">
+      <div class="why-head" data-reveal>
+        <h2 class="sec-mark" id="why-title">Why buyers are looking at JB now</h2>
+        <p class="lede muted">The CIQ area sits where Malaysia's busiest border crossing meets a new rail link. That is what drives rental demand here.</p>
+      </div>
+      <div class="claims">
+        <div class="claim" data-reveal>
+          <span class="fig" aria-hidden="true">10,000</span>
+          <p class="claim-text">The RTS Link will carry up to 10,000 passengers an hour each way across the Strait of Johor, in about five minutes.</p>
+          <p class="small">Source: Land Transport Authority, Singapore. Service targeted for early 2027.</p>
+        </div>
+        <div class="claim" data-reveal>
+          <span class="fig" aria-hidden="true">Every day</span>
+          <p class="claim-text">Hundreds of thousands of Malaysians cross into Singapore for work every day. Many want to rent close to the crossing.</p>
+          <p class="small">That is the tenant pool for units near the CIQ.</p>
+        </div>
+        <div class="claim" data-reveal>
+          <span class="fig" aria-hidden="true">RM2,200</span>
+          <p class="claim-text">Studios and one-bedroom units near the CIQ can rent for up to RM2,200 a month.</p>
+          <p class="small">Actual rent depends on the unit, furnishing and building.</p>
+        </div>
+        <div class="claim" data-reveal>
+          <span class="fig" aria-hidden="true">JS-SEZ</span>
+          <p class="claim-text">The Johor–Singapore Special Economic Zone is bringing new investment and jobs into the state.</p>
+          <p class="small">More employers in Johor means more people looking for homes in Johor.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ======================================================================
+       IN THE NEWS
+       ====================================================================== -->
+  <section class="press sand" aria-labelledby="press-title">
+    <div class="wrap press-in">
+      <h3 id="press-title">In the news</h3>
+      <ul>
+        <!-- REPLACE each href="#" with the article link -->
+        <li><a href="#"><span class="press-o">The Sun</span><span class="press-h">Johor experiences strongest property demand from foreigners, led by Singaporeans</span></a></li>
+        <li><a href="#"><span class="press-o">The Star</span><span class="press-h">Johor property sales set to boom with announcement</span></a></li>
+        <li><a href="#"><span class="press-o">PropertyGuru</span><span class="press-h">Johor real estate showing signs of steady growth</span></a></li>
+        <li><a href="#"><span class="press-o">Yahoo News</span><span class="press-h">Investment property in Johor: top 2 areas with price appreciation</span></a></li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- ======================================================================
+       PROJECTS: swipe on phones, side by side on desktop
+       ====================================================================== -->
+  <section class="projects" id="projects" aria-labelledby="projects-title">
+    <div class="wrap">
+      <h2 class="sec-mark" id="projects-title" data-reveal>Two projects I'd show you first</h2>
+
+      <!-- Counter and arrows (phones only; shown by the script) -->
+      <div class="proj-nav" id="proj-nav" hidden>
+        <p class="proj-count" aria-live="polite"><span id="proj-i">1</span> of <span id="proj-n">2</span></p>
+        <div class="proj-arrows">
+          <button type="button" class="proj-btn" id="proj-prev" aria-label="Previous project"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M15 5l-7 7 7 7" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+          <button type="button" class="proj-btn" id="proj-next" aria-label="Next project"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 5l7 7-7 7" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+        </div>
+      </div>
+
+      <div class="proj-grid" id="proj-track">
+        <article class="proj" data-reveal aria-labelledby="kt-title">
+          <!-- REPLACE with <img src="..." alt="Exsim Kebun Teh" style="width:100%;aspect-ratio:16/9;object-fit:cover;border-radius:4px"> -->
+          <div class="photo" role="img" aria-label="Photo placeholder: Exsim Kebun Teh"><span class="ph-label">Photo: Kebun Teh, 16:9</span></div>
+          <div class="proj-body">
+            <h3 id="kt-title">Exsim Kebun Teh</h3>
+            <p class="lede">About 3 km from the CIQ, with a free shuttle bus to the crossing and daily errands within walking distance.</p>
+            <dl class="facts">
+              <div><dt>To the CIQ</dt><dd>About 3 km, one traffic light, free shuttle bus</dd></div>
+              <div><dt>Price</dt><dd>From about RM700 per sq ft</dd></div>
+              <div><dt>On foot</dt><dd>CU Mart, ZUS Coffee, FamilyMart, four banks and the local market</dd></div>
+              <div><dt>Good for</dt><dd>Renting to cross-border workers, or a first home</dd></div>
+            </dl>
+            <a class="btn btn-green" data-wa="kt" href="https://wa.me/601126168047"><svg class="ico" aria-hidden="true"><use href="#i-chat"/></svg>Ask about Kebun Teh</a>
+          </div>
+        </article>
+
+        <article class="proj" data-reveal aria-labelledby="ciq-title">
+          <!-- REPLACE with <img src="..." alt="Exsim CIQ" style="width:100%;aspect-ratio:16/9;object-fit:cover;border-radius:4px"> -->
+          <div class="photo" role="img" aria-label="Photo placeholder: Exsim CIQ"><span class="ph-label">Photo: Exsim CIQ, 16:9</span></div>
+          <div class="proj-body">
+            <h3 id="ciq-title">Exsim CIQ</h3>
+            <p class="lede">Exsim's prime-location project for investors who want to be as close to the crossing as possible.</p>
+            <dl class="facts">
+              <!-- REPLACE with the real distance and price -->
+              <div><dt>To the CIQ</dt><dd>Ask me for the exact distance and walking route</dd></div>
+              <div><dt>Price</dt><dd>Ask me for the current price list</dd></div>
+              <div><dt>Good for</dt><dd>Investors, and short-stay rentals where the building allows it</dd></div>
+            </dl>
+            <a class="btn btn-green" data-wa="ciq" href="https://wa.me/601126168047"><svg class="ico" aria-hidden="true"><use href="#i-chat"/></svg>Ask about Exsim CIQ</a>
+          </div>
+        </article>
+      </div>
+
+      <p class="dev-note">About the developer: Exsim has completed around 40 residential and investment projects since 2008, and launched six in 2020 alone.</p>
+    </div>
+  </section>
+
+  <!-- ======================================================================
+       BUYING NEW COMES WITH EXTRAS
+       ====================================================================== -->
+  <section class="perks white" aria-labelledby="perks-title">
+    <div class="wrap split">
+      <div class="split-head" data-reveal>
+        <h2 class="sec-mark" id="perks-title">Buying new comes with extras</h2>
+        <p class="lede muted">Developers often cover costs you'd pay yourself on a resale unit. Open each one to see what it saves you.</p>
+        <p class="small muted">What's included changes by project and campaign.</p>
+        <a class="btn btn-green" data-wa="perks" href="https://wa.me/601126168047"><svg class="ico" aria-hidden="true"><use href="#i-chat"/></svg>Ask what's included now</a>
+      </div>
+      <div class="acc" data-reveal>
+        <details><summary>Free SPA legal fees</summary><div class="acc-body"><p>The developer pays the lawyer's fee for your sale and purchase agreement.</p></div></details>
+        <details><summary>Free loan legal fees</summary><div class="acc-body"><p>The lawyer's fee for your loan agreement is covered too, on projects that offer it.</p></div></details>
+        <details><summary>Free MOT</summary><div class="acc-body"><p>The stamp duty for transferring the title into your name, the memorandum of transfer, is absorbed by the developer.</p></div></details>
+        <details><summary>Rebates</summary><div class="acc-body"><p>A discount off the list price, which can lower what you need to pay up front.</p></div></details>
+        <details><summary>Zero deposit</summary><div class="acc-body"><p>No 10% down payment at signing on selected projects. A small booking fee usually still applies.</p></div></details>
+      </div>
+    </div>
+  </section>
+
+  <!-- ======================================================================
+       EARLY ACCESS: scrolling developer logos
+       Logos load from SETTINGS.developerLogos; each tile shows the name until a logo is added.
+       ====================================================================== -->
+  <section class="early sand" aria-labelledby="early-title">
+    <div class="wrap" data-reveal>
+      <h2 class="sec-mark" id="early-title">Hear about new launches before the public</h2>
+      <p class="lede">I work on new launches from these developers and can register you for units and prices before they're released.</p>
+    </div>
+    <div class="marquee">
+      <div class="marquee-track">
+        <ul class="devs" aria-label="Developers I work with">
+          <li class="logo" data-logo="exsim"><span class="logo-name">Exsim</span></li>
+          <li class="logo" data-logo="setia"><span class="logo-name">Setia</span></li>
+          <li class="logo" data-logo="ecoworld"><span class="logo-name">Eco World</span></li>
+          <li class="logo" data-logo="mahsing"><span class="logo-name">Mah Sing</span></li>
+          <li class="logo" data-logo="iwcity"><span class="logo-name">IWCity</span></li>
+          <li class="logo logo-more"><span class="logo-name">and more</span></li>
+        </ul>
+        <!-- Duplicate set so the loop is seamless (hidden from screen readers) -->
+        <ul class="devs" aria-hidden="true">
+          <li class="logo" data-logo="exsim"><span class="logo-name">Exsim</span></li>
+          <li class="logo" data-logo="setia"><span class="logo-name">Setia</span></li>
+          <li class="logo" data-logo="ecoworld"><span class="logo-name">Eco World</span></li>
+          <li class="logo" data-logo="mahsing"><span class="logo-name">Mah Sing</span></li>
+          <li class="logo" data-logo="iwcity"><span class="logo-name">IWCity</span></li>
+          <li class="logo logo-more"><span class="logo-name">and more</span></li>
+        </ul>
+      </div>
+    </div>
+    <div class="wrap">
+      <a class="btn btn-green" data-wa="early" href="https://wa.me/601126168047"><svg class="ico" aria-hidden="true"><use href="#i-chat"/></svg>Get early access on WhatsApp</a>
+    </div>
+  </section>
+
+  <!-- ======================================================================
+       YIELD CHECK
+       ====================================================================== -->
+  <section class="yield" id="yield" aria-labelledby="yield-title">
+    <div class="wrap">
+      <div data-reveal>
+        <h2 class="sec-mark" id="yield-title">Check the rent against the price</h2>
+        <p class="lede muted">Move the sliders to see the gross rental yield on a unit. Then send me the numbers and I'll show you what fits.</p>
+      </div>
+      <div class="yield-grid" data-reveal>
+        <!-- Sliders (with a compact result above them on phones) -->
+        <div>
+          <p class="yield-mini" aria-hidden="true"><span>Gross yield</span> <strong id="yield-mini">4.8%</strong></p>
+          <div class="field">
+            <div class="field-top"><label for="price">Unit price</label><output id="price-out" for="price">RM450,000</output></div>
+            <input type="range" id="price" min="250000" max="1000000" step="10000" value="450000">
+            <div class="range-ends" aria-hidden="true"><span>RM250k</span><span>RM1m</span></div>
+          </div>
+          <div class="field">
+            <div class="field-top"><label for="rent">Monthly rent</label><output id="rent-out" for="rent">RM1,800</output></div>
+            <input type="range" id="rent" min="800" max="4000" step="50" value="1800">
+            <div class="range-ends" aria-hidden="true"><span>RM800</span><span>RM4,000</span></div>
+          </div>
+        </div>
+        <!-- Result -->
+        <div class="result dark">
+          <p class="result-label">Gross yield</p>
+          <p class="result-num" id="yield-num" aria-hidden="true">4.8%</p>
+          <div class="bar" aria-hidden="true"><div class="bar-fill" id="yield-bar" style="width:48%"></div></div>
+          <div class="bar-scale" aria-hidden="true"><span>0%</span><span>5%</span><span>10%</span></div>
+          <p class="result-sentence" id="yield-sentence">RM1,800 a month is RM21,600 a year, or 4.8% of RM450,000 before costs.</p>
+          <p class="sr-only" id="yield-live" aria-live="polite"></p>
+          <p class="small">Gross yield leaves out maintenance fees, sinking fund, tax, empty months and loan interest. Use it as a first check, not financial advice.</p>
+          <a class="btn btn-ghost" id="yield-cta" href="https://wa.me/601126168047"><svg class="ico" aria-hidden="true"><use href="#i-chat"/></svg>Send these numbers on WhatsApp</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ======================================================================
+       ABOUT
+       ====================================================================== -->
+  <section class="about white" aria-labelledby="about-title">
+    <div class="wrap about-grid">
+      <!-- REPLACE with <img src="..." alt="Ubai Wilson" style="width:100%;aspect-ratio:4/5;object-fit:cover;border-radius:6px"> -->
+      <div class="photo portrait" role="img" aria-label="Photo placeholder: Ubai Wilson" data-reveal><span class="ph-label">Photo: your portrait, 4:5</span></div>
+      <div data-reveal>
+        <h2 class="sec-mark" id="about-title">Hi, I'm Ubai</h2>
+        <p class="lede">I focus on new launches around the JB CIQ, for investors renting to cross-border workers and for people buying their first home.</p>
+        <p class="muted">I post walkthroughs of show units and completed buildings on TikTok as @ubaiwilson, so you can see a place before you visit.</p>
+        <p><a class="about-link" href="https://www.tiktok.com/@ubaiwilson" target="_blank" rel="noopener">Watch on TikTok</a></p>
+        <!-- REPLACE: your REN registration number -->
+        <p class="creds">Registered negotiator REN XXXXX, IQI Realty, Elite Legacy</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ======================================================================
+       HOW WE'D WORK TOGETHER
+       ====================================================================== -->
+  <section class="how" aria-labelledby="how-title">
+    <div class="wrap">
+      <h2 class="sec-mark" id="how-title" data-reveal>How we'd work together</h2>
+      <ol class="steps">
+        <li class="step" data-reveal><span class="step-num" aria-hidden="true">1</span><h3>Message me</h3><p>Tell me your budget and whether you want to invest or live in it.</p></li>
+        <li class="step" data-reveal><span class="step-num" aria-hidden="true">2</span><h3>Get a shortlist and loan check</h3><p>I'll send units that fit and check how much you can borrow before you commit.</p></li>
+        <li class="step" data-reveal><span class="step-num" aria-hidden="true">3</span><h3>View, book and sign</h3><p>I arrange viewings and handle the booking and paperwork with the developer.</p></li>
+      </ol>
+    </div>
+  </section>
+
+  <!-- ======================================================================
+       Q&A
+       ====================================================================== -->
+  <section class="faq white" id="faq" aria-labelledby="faq-title">
+    <div class="wrap split">
+      <div class="split-head" data-reveal>
+        <h2 class="sec-mark" id="faq-title">Questions buyers ask me</h2>
+        <p class="lede muted">Don't see yours? Ask me directly.</p>
+        <a class="btn btn-green" data-wa="general" href="https://wa.me/601126168047"><svg class="ico" aria-hidden="true"><use href="#i-chat"/></svg>Ask on WhatsApp</a>
+      </div>
+      <div class="acc acc-sm" data-reveal>
+        <details><summary>Do I pay you a fee?</summary><div class="acc-body"><p>Not for new launches. The developer pays my commission, so working with me costs you nothing extra.</p></div></details>
+        <details><summary>Can Singaporeans and other foreigners buy?</summary><div class="acc-body"><p>Yes, but foreign buyers must meet Johor's minimum purchase price and get state approval. The rules change, so ask me what applies today before you shortlist.</p></div></details>
+        <details><summary>Can I rent the unit out on Airbnb?</summary><div class="acc-body"><p>It depends on the building's house rules and local council rules on short stays. I'll tell you which projects allow it before you book.</p></div></details>
+        <details><summary>How much do I need up front?</summary><div class="acc-body"><p>With some developer packages, only a booking fee. It depends on the project, your loan margin and the campaign running when you book.</p></div></details>
+        <details><summary>When does the RTS Link open?</summary><div class="acc-body"><p>Passenger service is targeted for early 2027. The date has moved before, so treat it as a target rather than a promise.</p></div></details>
+      </div>
+    </div>
+  </section>
+
+  <!-- ======================================================================
+       JOIN THE TEAM
+       ====================================================================== -->
+  <section class="join sand" aria-labelledby="join-title">
+    <div class="wrap join-in">
+      <div>
+        <h2 id="join-title">Want to sell property too?</h2>
+        <p>I'm growing a team of negotiators in Johor Bahru. Message me to hear how it works.</p>
+      </div>
+      <a class="btn btn-light" data-wa="join" href="https://wa.me/601126168047"><svg class="ico" aria-hidden="true"><use href="#i-chat"/></svg>Ask about joining</a>
+    </div>
+  </section>
+
+  <!-- ======================================================================
+       FINAL CALL TO ACTION
+       ====================================================================== -->
+  <section class="final dark" id="final" aria-labelledby="final-title">
+    <div class="wrap" data-reveal>
+      <h2 id="final-title">Tell me what you're looking for.</h2>
+      <p class="lede">Send your budget and what the home is for. I'll reply with options that fit.</p>
+      <a class="btn btn-cta btn-xl" data-wa="consult" href="https://wa.me/601126168047">
+        <span class="wa-icon" aria-hidden="true"><svg class="ico"><use href="#i-chat"/></svg></span>
+        <span>Get your free consultation</span><span class="sr-only"> on WhatsApp</span>
+      </a>
+    </div>
+  </section>
+
+</main>
+
+<!-- ======================================================================
+     FOOTER
+     ====================================================================== -->
+<footer class="site-footer">
+  <div class="wrap">
+    <div class="foot">
+      <div>
+        <strong>Ubai Wilson</strong>
+        <!-- REPLACE: your REN registration number -->
+        <p class="muted">Real estate negotiator, REN XXXXX<br>IQI Realty, Elite Legacy</p>
+      </div>
+      <ul>
+        <li><a data-wa="general" href="https://wa.me/601126168047">WhatsApp</a></li>
+        <li><a href="https://www.tiktok.com/@ubaiwilson" target="_blank" rel="noopener">TikTok</a></li>
+      </ul>
+      <ul>
+        <li><a href="#why">Why JB</a></li>
+        <li><a href="#projects">Projects</a></li>
+        <li><a href="#faq">Q&amp;A</a></li>
+      </ul>
+    </div>
+    <p class="small muted foot-fine">Prices, distances, rents and developer packages are indicative and can change. Nothing on this page is financial advice. © 2026 Ubai Wilson.</p>
+  </div>
+</footer>
+
+<!-- ======================================================================
+     MOBILE STICKY CALL TO ACTION (phones only)
+     ====================================================================== -->
+<div class="mbar" id="mbar">
+  <a class="btn btn-cta btn-lg" id="mbar-cta" href="https://wa.me/601126168047">
+    <span class="wa-icon" aria-hidden="true"><svg class="ico"><use href="#i-chat"/></svg></span>
+    <span>Get your free consultation</span><span class="sr-only"> on WhatsApp</span>
+  </a>
+</div>
+
+<script>
+/* =========================================================================
+   SETTINGS: everything you may need to edit is in this block
+   ========================================================================= */
+var SETTINGS = {
+  // Your WhatsApp number: country code first, no + or spaces
+  whatsappNumber: '601126168047',
+
+  // Optional: official WhatsApp icon (URL or data: URI). Leave '' to keep the neutral chat icon.
+  whatsappIcon: '',
+
+  // Optional: official developer logos (URL or data: URI, SVG or transparent PNG). '' shows the name instead.
+  developerLogos: { exsim: '', setia: '', ecoworld: '', mahsing: '', iwcity: '' },
+
+  // Pre-filled WhatsApp message for each button
+  messages: {
+    consult: "Hi Ubai, I'd like a free consultation about new launches near JB CIQ.",
+    invest:  "Hi Ubai, I'd like a free consultation. I'm interested in an investment property near JB CIQ.",
+    live:    "Hi Ubai, I'd like a free consultation. I'm looking for a home to live in near JB CIQ.",
+    loan:    "Hi Ubai, I'd like a free consultation to check how much of a home loan I can get.",
+    general: "Hi Ubai, I found your website. I'd like to know more about new launches near JB CIQ.",
+    kt:      "Hi Ubai, I'd like details on Exsim Kebun Teh: prices, available units and the rental outlook.",
+    ciq:     "Hi Ubai, I'd like details on Exsim CIQ: prices, available units and distance to the CIQ.",
+    perks:   "Hi Ubai, which developer packages (free legal fees, rebates, zero deposit) are available right now?",
+    early:   "Hi Ubai, please add me to your early access list for new launches.",
+    join:    "Hi Ubai, I'm interested in joining your team as a real estate negotiator."
+  }
+};
+
+/* =========================================================================
+   LEAD_FORM: the consultation form, mapped to your Google Form
+   label = what visitors see. value = what Google receives (must match the Google Form option exactly).
+   If you change the Google Form, update this too, and set ready: false until they match (it pauses sending).
+   ========================================================================= */
+var LEAD_FORM = {
+  action: 'https://docs.google.com/forms/d/e/1FAIpQLSe75tLrnHYs3jdmJa6tZLEBE1DbKeYIrFRrEmr4OCfOymUg6Q/formResponse',
+  ready: true,
+  sections: [
+    {
+      title: 'Your details',                 // Google Form section 1
+      questions: [
+        { entry: 'entry.307963359', label: 'Preferred name', type: 'text', required: true, autocomplete: 'nickname',
+          requiredMsg: "Enter the name you'd like us to use." },
+        { entry: 'entry.1400619733', label: 'Email', type: 'email', required: true, autocomplete: 'email', placeholder: 'name@example.com' },
+        { entry: 'entry.1569813260', label: 'Phone number', hint: 'Start with +60 (Malaysia) or +65 (Singapore).', type: 'tel',
+          required: true, autocomplete: 'tel', placeholder: '+60 12 345 6789' }
+      ]
+    },
+    {
+      title: 'About your plans',             // Google Form section 2 (all optional, so it starts closed)
+      questions: [
+        { entry: 'entry.607669294', label: 'Employment type', type: 'radio', options: [
+          { label: 'Civil servant',        value: 'Penjawat Awam' },
+          { label: 'Salaried employee',    value: 'Pekerja Bergaji Tetap' },
+          { label: 'Business owner',       value: 'Pemilik Perniagaan (Biz Owner)' },
+          { label: 'Self-employed',        value: 'Bekerja Sendiri (Self-Employed)' },
+          { label: 'Freelancer',           value: 'Freelancer' },
+          { label: 'Working in Singapore', value: 'Bekerja di Singapura' },
+          { label: 'Other', other: true }
+        ]},
+        { entry: 'entry.2120632677', label: 'Monthly net salary', hint: 'After EPF and SOCSO deductions.', type: 'radio', options: [
+          { label: 'RM1,700 and below',  value: 'RM1700 dan Kebawah' },
+          { label: 'RM1,700 to RM2,300', value: 'RM1700 ~ RM2300' },
+          { label: 'RM2,300 to RM3,200', value: 'RM2300 ~ RM3200' },
+          { label: 'RM3,200 to RM4,500', value: 'RM3200 ~ RM4500' },
+          { label: 'RM4,500 to RM6,000', value: 'RM4500 ~ RM6000' },
+          { label: 'RM6,000 and above',  value: 'RM6000 dan Keatas' },
+          { label: 'Other', other: true }
+        ]},
+        { entry: 'entry.1079802534', label: "What's the home for?", type: 'radio', options: [
+          { label: 'My first home',          value: 'Rumah Pertama' },
+          { label: 'To live in',             value: 'Duduk Sendiri / Own Stay' },
+          { label: 'Investment',             value: 'Pelaburan / Investment' },
+          { label: 'Upgrading my home',      value: 'Upgrade Home' },
+          { label: 'Just exploring for now', value: 'Tiada tujuan tetap. Hanya ingin tahu' }
+        ]},
+        { entry: 'entry.1783237945', label: 'Any questions for me?', type: 'text', placeholder: 'Ask anything about buying near the CIQ' }
+      ]
+    }
+  ]
+};
+
+/* =========================================================================
+   PAGE BEHAVIOUR (no edits needed below this line)
+   ========================================================================= */
+(function () {
+  'use strict';
+
+  var motionOK = window.matchMedia('(prefers-reduced-motion: no-preference)').matches;
+  function $(id) { return document.getElementById(id); }
+  function each(sel, fn) { Array.prototype.forEach.call(document.querySelectorAll(sel), fn); }
+  function waLink(text) { return 'https://wa.me/' + SETTINGS.whatsappNumber + '?text=' + encodeURIComponent(text); }
+  function setWa(a, text) { if (!a) return; a.href = waLink(text); a.target = '_blank'; a.rel = 'noopener'; }
+
+  var heroCta = $('hero-cta');
+
+  /* ---------- 1. WhatsApp buttons: number and pre-filled message ---------- */
+  each('[data-wa]', function (a) { setWa(a, SETTINGS.messages[a.dataset.wa] || SETTINGS.messages.general); });
+
+  /* ---------- 2. Hero chips: change the hero and sticky-bar message ---------- */
+  (function () {
+    var mbarCta = $('mbar-cta'), preview = $('msg-preview');
+    function setIntent(value, animate) {
+      var text = SETTINGS.messages[value] || SETTINGS.messages.consult;
+      setWa(heroCta, text); setWa(mbarCta, text);
+      preview.textContent = text;
+      if (animate) { preview.classList.remove('flash'); void preview.offsetWidth; preview.classList.add('flash'); }
+    }
+    each('input[name="intent"]', function (r) {
+      r.addEventListener('change', function () { if (r.checked) setIntent(r.value, true); });
+    });
+    var checked = document.querySelector('input[name="intent"]:checked');
+    setIntent(checked ? checked.value : 'invest', false);
+  })();
+
+  /* ---------- 3. Optional images: WhatsApp icon and developer logos ---------- */
+  (function () {
+    function loadImage(src, onload) { var img = new Image(); img.alt = ''; img.decoding = 'async'; img.onload = function () { onload(img); }; img.src = src; }
+    if (SETTINGS.whatsappIcon) {
+      each('.wa-icon', function (slot) {
+        loadImage(SETTINGS.whatsappIcon, function (img) { slot.textContent = ''; slot.appendChild(img); slot.classList.add('has-img'); });
+      });
+    }
+    each('.logo[data-logo]', function (li) {
+      var src = SETTINGS.developerLogos[li.dataset.logo];
+      if (src) loadImage(src, function (img) { li.insertBefore(img, li.firstChild); li.classList.add('loaded'); });
+    });
+  })();
+
+  /* ---------- 4. Consultation form: closed by default behind a button ---------- */
+  (function () {
+    var toggle = $('consult-toggle'), body = $('consult-body');
+    if (!toggle || !body) return;
+    var text = toggle.querySelector('.consult-toggle-text'), closedLabel = text.textContent;
+    function set(open) {
+      body.hidden = !open;
+      toggle.setAttribute('aria-expanded', open ? 'true' : 'false');
+      text.textContent = open ? 'Hide the form' : closedLabel;
+    }
+    toggle.hidden = false;
+    set(false);
+    toggle.addEventListener('click', function () {
+      var open = body.hidden;
+      set(open);
+      if (open) body.scrollIntoView({ behavior: motionOK ? 'smooth' : 'auto', block: 'nearest' });
+    });
+  })();
+
+  /* ---------- 5. Consultation form: build, validate, submit to Google Forms ---------- */
+  (function () {
+    var form = $('lead-form');
+    if (!form) return;
+    var holder = $('lf-fields'), formError = $('lf-form-error'), thanks = $('lf-thanks');
+    var submitBtn = form.querySelector('.lf-submit'), submitText = form.querySelector('.lf-submit-text');
+    var all = [], attempted = false;
+
+    function el(tag, attrs, text) {
+      var n = document.createElement(tag);
+      for (var k in attrs || {}) { if (attrs[k] !== undefined && attrs[k] !== false) n.setAttribute(k, attrs[k] === true ? '' : attrs[k]); }
+      if (text) n.textContent = text;
+      return n;
+    }
+
+    // Build the fields from LEAD_FORM
+    LEAD_FORM.sections.forEach(function (sec) {
+      var section, optionalOnly = sec.questions.every(function (q) { return !q.required; });
+      if (optionalOnly) {
+        // Optional-only section: starts closed. Its fields stay in the form, so what Google receives is unchanged.
+        var more = el('details', { class: 'lf-more' }), sum = el('summary');
+        sum.appendChild(el('span', null, (sec.title || 'More') + ' '));
+        sum.lastChild.appendChild(el('span', { class: 'lf-opt' }, '(optional)'));
+        more.appendChild(sum);
+        section = el('div', { class: 'lf-more-body' });
+        more.appendChild(section);
+        holder.appendChild(more);
+      } else {
+        section = el('div', { class: 'lf-section' });
+        if (sec.title) section.appendChild(el('h3', { class: 'lf-section-title' }, sec.title));
+      }
+
+      sec.questions.forEach(function (q) {
+        var id = 'lf-' + q.entry.replace(/[^\w]/g, '-');
+        var wrap = el('div', { class: 'lf-q' });
+        var isChoice = q.type === 'radio' || q.type === 'checkbox';
+        var hint = q.hint ? el('p', { class: 'lf-hint', id: id + '-hint' }, q.hint) : null;
+        var err = el('p', { class: 'lf-error', id: id + '-err', hidden: true });
+        function addLabel(node) {
+          node.appendChild(document.createTextNode(q.label));
+          if (!q.required) node.appendChild(el('span', { class: 'lf-opt' }, ' (optional)'));
+        }
+
+        if (isChoice) {
+          var fs = el('fieldset', { class: 'lf-group' }), legend = el('legend'), list = el('div', { class: 'lf-choices' });
+          addLabel(legend); fs.appendChild(legend);
+          if (hint) fs.appendChild(hint);
+          q.options.forEach(function (opt, i) {
+            var o = typeof opt === 'string' ? { label: opt, value: opt } : opt;
+            var lab = el('label', { class: 'lf-choice' });
+            // Google receives "Other" as __other_option__ plus a separate text answer
+            var input = el('input', { type: q.type, name: q.entry, id: id + '-' + i, value: o.other ? '__other_option__' : o.value });
+            lab.appendChild(input); lab.appendChild(el('span', null, o.label)); list.appendChild(lab);
+            if (o.other) {
+              q.otherChoice = input;
+              q.otherInput = el('input', { class: 'lf-input lf-other', type: 'text', id: id + '-other', name: q.entry + '.other_option_response',
+                placeholder: 'Please specify', 'aria-label': q.label + ', other: please specify', disabled: true, hidden: true });
+            }
+          });
+          fs.appendChild(list);
+          if (q.otherInput) {
+            fs.appendChild(q.otherInput);
+            list.addEventListener('change', function () {
+              var on = q.otherChoice.checked;
+              q.otherInput.hidden = !on; q.otherInput.disabled = !on;   // disabled fields aren't sent
+              if (on) q.otherInput.focus();
+            });
+          }
+          fs.appendChild(err); wrap.appendChild(fs);
+          q.focusTarget = function () {
+            if (q.otherChoice && q.otherChoice.checked) return q.otherInput;
+            return list.querySelector('input:checked') || list.querySelector('input');
+          };
+        } else {
+          var label = el('label', { class: 'lf-label', for: id }); addLabel(label); wrap.appendChild(label);
+          if (hint) wrap.appendChild(hint);
+          var input;
+          if (q.type === 'textarea') {
+            input = el('textarea', { class: 'lf-input', id: id, name: q.entry, rows: 4 });
+          } else if (q.type === 'select') {
+            input = el('select', { class: 'lf-input', id: id, name: q.entry });
+            input.appendChild(el('option', { value: '' }, 'Choose one'));
+            q.options.forEach(function (opt) { var o = typeof opt === 'string' ? { label: opt, value: opt } : opt; input.appendChild(el('option', { value: o.value }, o.label)); });
+          } else {
+            input = el('input', { class: 'lf-input', id: id, name: q.entry, type: q.type === 'email' ? 'email' : q.type === 'tel' ? 'tel' : 'text',
+              autocomplete: q.autocomplete, placeholder: q.placeholder, inputmode: q.type === 'tel' ? 'tel' : undefined });
+          }
+          if (q.required) input.setAttribute('aria-required', 'true');
+          if (hint) input.setAttribute('aria-describedby', id + '-hint');
+          wrap.appendChild(input); wrap.appendChild(err);
+          q.input = input;
+          q.focusTarget = function () { return input; };
+        }
+
+        q.wrap = wrap; q.err = err; q.errId = id + '-err'; q.hintId = hint ? id + '-hint' : null;
+        // Re-check as people type or choose, so a fixed error clears straight away (not on blur, which shifts the layout mid-tap)
+        wrap.addEventListener('input', function () { if (attempted) validate(q); });
+        if (isChoice || q.type === 'select') wrap.addEventListener('change', function () { if (attempted) validate(q); });
+        wrap.addEventListener('focusout', function () { if (attempted) validate(q); });
+        section.appendChild(wrap);
+        all.push(q);
+      });
+      if (!optionalOnly) holder.appendChild(section);
+    });
+
+    // Google needs every page in pageHistory to accept a multi-page response ("0,1" for two sections)
+    $('lf-page-history').value = LEAD_FORM.sections.map(function (_, i) { return i; }).join(',');
+
+    // Validation
+    function normalisePhone(v) {
+      var p = v.replace(/[\s\-().]/g, '');
+      return /^(60|65)\d/.test(p) ? '+' + p : p;
+    }
+    function phoneOk(p) { return /^\+60\d{8,10}$/.test(p) || /^\+65[3689]\d{7}$/.test(p); }
+    function message(q) {
+      if (q.type === 'radio' || q.type === 'checkbox') {
+        var picked = form.querySelectorAll('input[name="' + q.entry + '"]:checked').length;
+        if (q.required && !picked) return q.requiredMsg || (q.type === 'radio' ? 'Choose one option.' : 'Choose at least one option.');
+        if (q.otherChoice && q.otherChoice.checked && !q.otherInput.value.trim()) { q.otherMissing = true; return 'Tell us a bit more, or choose another option.'; }
+        return '';
+      }
+      var v = q.input.value.trim();
+      if (q.type === 'select') return q.required && !v ? (q.requiredMsg || 'Choose an option.') : '';
+      if (!v) {
+        if (!q.required) return '';
+        return q.requiredMsg || (q.type === 'email' ? 'Enter your email address.' : q.type === 'tel' ? 'Enter your phone number.' : 'Fill in this field.');
+      }
+      if (q.type === 'email' && !/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(v)) return 'Enter an email address like name@example.com.';
+      if (q.type === 'tel' && !phoneOk(normalisePhone(v))) return 'Enter a number starting with +60 or +65, for example +60 12 345 6789 or +65 8123 4567.';
+      return '';
+    }
+    function validate(q) {
+      q.otherMissing = false;
+      var m = message(q);
+      // If only the "Other" text is missing, highlight that box rather than every option
+      q.wrap.classList.toggle('has-error', !!m && !q.otherMissing);
+      q.wrap.classList.toggle('other-error', !!q.otherMissing);
+      q.err.textContent = m; q.err.hidden = !m;
+      var targets = q.input ? [q.input] : q.otherMissing ? [q.otherInput] : Array.prototype.slice.call(q.wrap.querySelectorAll('input'));
+      if (q.otherInput && !m) q.otherInput.removeAttribute('aria-invalid');
+      targets.forEach(function (t) {
+        if (m) t.setAttribute('aria-invalid', 'true'); else t.removeAttribute('aria-invalid');
+        var d = [q.hintId, m ? q.errId : null].filter(Boolean).join(' ');
+        if (d) t.setAttribute('aria-describedby', d); else t.removeAttribute('aria-describedby');
+      });
+      return !m;
+    }
+
+    // Submit
+    function setLoading(on) {
+      submitBtn.disabled = on;
+      submitBtn.classList.toggle('is-loading', on);
+      form.setAttribute('aria-busy', on ? 'true' : 'false');
+      submitText.textContent = on ? 'Sending…' : 'Send my details';
+    }
+    function showFormError(text) { formError.textContent = text; formError.hidden = !text; }
+
+    form.addEventListener('submit', function (e) {
+      e.preventDefault();
+      attempted = true;
+      showFormError('');
+      var invalid = all.filter(function (q) { return !validate(q); });
+      if (invalid.length) {
+        var closed = invalid[0].wrap.closest('details');
+        if (closed) closed.open = true;
+        invalid[0].focusTarget().focus();
+        return;
+      }
+      if (!LEAD_FORM.ready) {
+        showFormError("This form isn't connected yet. Please use the link below for now.");
+        return;
+      }
+      var data = new FormData(form);
+      all.forEach(function (q) { if (q.type === 'tel' && q.input.value.trim()) data.set(q.entry, normalisePhone(q.input.value.trim())); });
+
+      setLoading(true);
+      // no-cors: Google doesn't allow reading the reply, so success means "sent"
+      fetch(LEAD_FORM.action, { method: 'POST', mode: 'no-cors', body: data })
+        .then(function () { form.hidden = true; thanks.hidden = false; thanks.focus(); })
+        .catch(function () {
+          setLoading(false);
+          showFormError("We couldn't send your details. Check your connection and try again, or use the link below to open the form.");
+        });
+    });
+  })();
+
+  /* ---------- 6. Projects: "1 of 2" counter and arrows for the sideways cards on phones ---------- */
+  (function () {
+    var track = $('proj-track'), nav = $('proj-nav');
+    if (!track || !nav || !('IntersectionObserver' in window)) return;
+    var cards = track.querySelectorAll('.proj'), prev = $('proj-prev'), next = $('proj-next'), current = 0;
+    function indexOf(card) { return Array.prototype.indexOf.call(cards, card); }
+    function show(i) {
+      current = i;
+      $('proj-i').textContent = i + 1;
+      prev.disabled = i === 0;
+      next.disabled = i === cards.length - 1;
+      Array.prototype.forEach.call(cards, function (c, j) { c.classList.toggle('is-current', j === i); });
+    }
+    function go(i) {
+      i = Math.max(0, Math.min(cards.length - 1, i));
+      cards[i].scrollIntoView({ behavior: motionOK ? 'smooth' : 'auto', block: 'nearest', inline: 'start' });
+    }
+    $('proj-n').textContent = cards.length;
+    nav.hidden = false;
+    track.classList.add('is-swipe');
+    prev.addEventListener('click', function () { go(current - 1); });
+    next.addEventListener('click', function () { go(current + 1); });
+    // The card that is mostly in view becomes the current one
+    var io = new IntersectionObserver(function (es) {
+      es.forEach(function (e) { if (e.intersectionRatio >= .6) show(indexOf(e.target)); });
+    }, { root: track, threshold: [.6] });
+    Array.prototype.forEach.call(cards, function (c) { io.observe(c); });
+    // Tabbing to a button inside a card brings that card in
+    track.addEventListener('focusin', function (e) { var c = e.target.closest('.proj'); if (c) show(indexOf(c)); });
+    show(0);
+  })();
+
+  /* ---------- 7. Yield check ---------- */
+  (function () {
+    var price = $('price'), rent = $('rent');
+    if (!price || !rent) return;
+    var num = $('yield-num'), mini = $('yield-mini'), bar = $('yield-bar'), sentence = $('yield-sentence'), live = $('yield-live');
+    var shown = null, raf, liveTimer;
+    function rm(n) { return 'RM' + Math.round(n).toLocaleString('en-MY'); }
+    function showNumber(to) {                                   // counts to the new value
+      if (!motionOK || shown === null) { shown = to; num.textContent = to.toFixed(1) + '%'; return; }
+      var from = shown, t0 = performance.now();
+      cancelAnimationFrame(raf);
+      (function step(t) {
+        var k = Math.min((t - t0) / 320, 1); k = 1 - Math.pow(1 - k, 3);
+        shown = from + (to - from) * k; num.textContent = shown.toFixed(1) + '%';
+        if (k < 1) raf = requestAnimationFrame(step);
+      })(t0);
+    }
+    function update() {
+      var p = +price.value, r = +rent.value, y = r * 12 / p * 100;
+      $('price-out').textContent = rm(p); $('rent-out').textContent = rm(r);
+      price.setAttribute('aria-valuetext', rm(p)); rent.setAttribute('aria-valuetext', rm(r) + ' a month');
+      price.style.setProperty('--fill', ((p - price.min) / (price.max - price.min) * 100) + '%');
+      rent.style.setProperty('--fill', ((r - rent.min) / (rent.max - rent.min) * 100) + '%');
+      var s = rm(r) + ' a month is ' + rm(r * 12) + ' a year, or ' + y.toFixed(1) + '% of ' + rm(p) + ' before costs.';
+      sentence.textContent = s;
+      bar.style.width = Math.min(y / 10, 1) * 100 + '%';
+      showNumber(y);
+      mini.textContent = y.toFixed(1) + '%';
+      clearTimeout(liveTimer);
+      liveTimer = setTimeout(function () { live.textContent = 'Gross yield ' + y.toFixed(1) + '%. ' + s; }, 700);
+      setWa($('yield-cta'), "Hi Ubai, I'm looking at a unit around " + rm(p) + " that could rent for about " + rm(r) +
+        " a month (" + y.toFixed(1) + "% gross). Can you show me options like this?");
+    }
+    price.addEventListener('input', update);
+    rent.addEventListener('input', update);
+    update();
+  })();
+
+  /* ---------- 8. Mobile sticky bar: shows once the hero button scrolls away.
+                   Hides over an opened form, while typing, and over the final section. ---------- */
+  (function () {
+    var bar = $('mbar');
+    if (!bar || !heroCta || !('IntersectionObserver' in window)) return;
+    var heroGone = false, typing = false, formIn = false, finalIn = false;
+    function sync() { bar.classList.toggle('show', heroGone && !typing && !formIn && !finalIn); }
+    new IntersectionObserver(function (es) {
+      es.forEach(function (e) { heroGone = !e.isIntersecting && e.boundingClientRect.top < 0; }); sync();
+    }).observe(heroCta);
+    new IntersectionObserver(function (es) {                   // the form is closed by default, so this only applies once opened
+      es.forEach(function (e) { formIn = e.isIntersecting; }); sync();
+    }).observe(document.querySelector('.form-card'));
+    new IntersectionObserver(function (es) {
+      es.forEach(function (e) { finalIn = e.isIntersecting; }); sync();
+    }, { threshold: .25 }).observe($('final'));
+    var leadForm = $('lead-form');                              // the keyboard is up while typing
+    leadForm.addEventListener('focusin', function (e) { if (e.target.matches('input[type=text], input[type=email], input[type=tel], textarea')) { typing = true; sync(); } });
+    leadForm.addEventListener('focusout', function () { typing = false; setTimeout(sync, 50); });
+  })();
+
+  /* ---------- 9. Scroll reveals ---------- */
+  (function () {
+    var items = document.querySelectorAll('[data-reveal]');
+    if (!('IntersectionObserver' in window)) { each('[data-reveal]', function (el) { el.classList.add('in'); }); return; }
+    var io = new IntersectionObserver(function (es) {
+      es.forEach(function (e) { if (e.isIntersecting) { e.target.classList.add('in'); io.unobserve(e.target); } });
+    }, { threshold: .15, rootMargin: '0px 0px -6% 0px' });
+    Array.prototype.forEach.call(items, function (el) { io.observe(el); });
+  })();
+})();
+</script>
+</body>
+</html>
