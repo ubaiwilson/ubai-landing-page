@@ -453,8 +453,6 @@
     .news-body { display: flex; flex-direction: column; gap: 6px; flex: 1; padding: 14px 14px 18px; }
     .news-date { font-size: .8125rem; color: var(--slate); }
     .press-h { font-size: .9375rem; font-weight: 600; line-height: 1.4; display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 3; line-clamp: 3; overflow: hidden; }
-    /* The peeking card shows only its frame and photo, so no text appears cut off */
-    @media (max-width: 899px) { .news-grid.is-swipe .news-card:not(.is-current) .news-body { opacity: 0; } }
     @media (min-width: 900px) {
       .news-nav { display: none; }
       .news-grid { grid-auto-flow: row; grid-template-columns: 1fr 1fr; gap: 24px; margin-top: clamp(28px, 3.5vw, 40px); padding: 0; overflow: visible; }
@@ -493,8 +491,6 @@
     }
     .proj .photo { aspect-ratio: 16 / 9; border-radius: 4px; }
     .proj-body { display: flex; flex-direction: column; flex: 1; padding: 0 4px; transition: opacity .25s ease; }
-    /* The peeking card shows only its frame and photo, so no text appears cut off */
-    @media (max-width: 899px) { .proj-grid.is-swipe .proj:not(.is-current) .proj-body { opacity: 0; } }
     .proj h3 { font-weight: 700; font-variation-settings: "opsz" 48; font-size: clamp(1.2rem, 1.6vw, 1.4rem); line-height: 1.2; margin-top: 14px; letter-spacing: -.015em; }
     .proj .lede { margin-top: 4px; font-size: .9375rem; line-height: 1.5; color: var(--slate); }
     .facts { margin: 14px 0 18px; flex: 1; }                                  /* one column of "label: value" rows */
@@ -1644,7 +1640,6 @@ var LEAD_FORM = {
       $('news-i').textContent = i + 1;
       prev.disabled = i === 0;
       next.disabled = i === cards.length - 1;
-      Array.prototype.forEach.call(cards, function (c, j) { c.classList.toggle('is-current', j === i); });
     }
     function go(i) {
       i = Math.max(0, Math.min(cards.length - 1, i));
@@ -1684,7 +1679,6 @@ var LEAD_FORM = {
       $('proj-i').textContent = i + 1;
       prev.disabled = i === 0;
       next.disabled = i === cards.length - 1;
-      Array.prototype.forEach.call(cards, function (c, j) { c.classList.toggle('is-current', j === i); });
     }
     function go(i) {
       i = Math.max(0, Math.min(cards.length - 1, i));
